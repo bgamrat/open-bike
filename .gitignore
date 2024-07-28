@@ -23,3 +23,8 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+/nbproject/private/
+# These will be ignored in the future
+# practice*
+# Practice*
