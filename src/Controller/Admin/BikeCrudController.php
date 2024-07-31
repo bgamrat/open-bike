@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class BikeCrudController extends AbstractCrudController {
@@ -27,6 +28,7 @@ class BikeCrudController extends AbstractCrudController {
             IntegerField::new('speeds'),
             NumberField::new('wheelSize'),
             ChoiceField::new('color')->setChoices(Color::cases())->autocomplete(),
+            TextEditorField::new('note')
       ];
     }
 }

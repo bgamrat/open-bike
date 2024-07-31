@@ -47,6 +47,9 @@ class Bike {
     #[ORM\Column(length: 16, nullable: true, enumType: Color::class)]
     private ?string $color = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $note = null;
+
     public function getId(): ?int {
         return $this->id;
     }
@@ -107,6 +110,18 @@ class Bike {
 
     public function setColor(string $color): static {
         $this->color = $color;
+
+        return $this;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): static
+    {
+        $this->note = $note;
 
         return $this;
     }

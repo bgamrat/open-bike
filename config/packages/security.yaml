@@ -1,6 +1,7 @@
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
+        App\Entity\User: 'auto'
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
@@ -9,6 +10,15 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+    role_hierarchy:
+        ROLE_API:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_ADMIN_GROUP: ROLE_ADMIN
+        ROLE_ADMIN_GROUP_ADMIN: [ROLE_API,ROLE_ADMIN_GROUP]
+        ROLE_ADMIN_USER:  ROLE_ADMIN
+        ROLE_ADMIN_USER_ADMIN: [ROLE_API,ROLE_ADMIN,ROLE_ADMIN_USER]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ADMIN_USER_ADMIN, ROLE_ADMIN_GROUP_ADMIN]
+        ROLE_USER:
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
