@@ -7,10 +7,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
                 </li>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item"><a href="/admin">{{ 'Admin' | trans }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin">{{ 'Admin' | trans }}</a></li>
                 {% endif %}
                 {#
                 <li class="nav-item">
@@ -31,13 +31,6 @@
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li>
                 #}
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}]
-                    <li class="nav-item"><a href="/logout" title="{{ 'Log out' | trans }}"><i class="bi bi-box-arrow-left fs-1 lh-1 p-0 m-0"></i></a></li>
-                {%  else %}
-                    {% if app.current_route != 'app_login' %}
-                        <li class="nav-item"><a href="/login" title="{{ 'Log in' | trans }}"><i class="bi bi-box-arrow-right fs-1 lh-1 p-0 m-0"></i></a></li>
-                    {% endif %}
-                {% endif %}
             </ul>
             {#
             <form class="d-flex">
@@ -45,6 +38,16 @@
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
             #}
+            <ul class="navbar-nav align-self-end mb-2 mb-lg-0">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}]
+                    <li class="nav-item"><a href="/logout" title="{{ 'Log out' | trans }}"><i class="bi bi-box-arrow-left fs-3 lh-1 p-0 m-0"></i></a></li>
+                {%  else %}
+                    {% if app.current_route != 'app_login' %}
+                        <li class="nav-item"><a href="/login" title="{{ 'Log in' | trans }}"><i class="bi bi-box-arrow-right fs-3 lh-1 p-0 m-0"></i></a></li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+
         </div>
     </div>
 </nav>

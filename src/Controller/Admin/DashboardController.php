@@ -9,23 +9,21 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DashboardController extends AbstractDashboardController
-{
+class DashboardController extends AbstractDashboardController {
+
     #[Route('/admin', name: 'admin')]
-    public function index(): Response
-    {
+    public function index(): Response {
         return $this->render('admin/dashboard.html.twig');
     }
 
-    public function configureDashboard(): Dashboard
-    {
+    public function configureDashboard(): Dashboard {
         return Dashboard::new()
-            ->setTitle('Open Bike');
+                        ->setTitle('Open Bike');
     }
 
-    public function configureMenuItems(): iterable
-    {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+    public function configureMenuItems(): iterable {
+        yield MenuItem::linkToRoute('Home', 'fas fa-home', 'home');
+        yield MenuItem::linkToDashboard('Dashboard', 'fas fa-gauge');
         yield MenuItem::linkToCrud('Bikes', 'fas fa-bicycle', Bike::class);
     }
 }

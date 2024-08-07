@@ -6,7 +6,7 @@
  *
  * @author bgamrat
  */
-namespace App\Config;
+namespace App\Config\Bike;
 
 enum Color: string
 {

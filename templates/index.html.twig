@@ -4,9 +4,9 @@
 
 {% block body %}
     <article>
-        <h1>{{ organization_name }}</h1>
-        <p><img src="{{ logo }}" alt="{{ organization_name }} {{ 'logo' | trans }}"></p>
-        <p> We repair used bikes that are donated to us and offer them at no cost to low income residents of the greater Nashua area</p>
+        <h1>{{ org_name }}</h1>
+        <p><img src="{{ org_logo }}" alt="{{ org_name }} {{ 'logo' | trans }}"></p>
+        <p>{{ org_home_text | trans }} </p>
     </article>
 {% endblock %}
 

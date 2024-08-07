@@ -8,12 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DefaultController extends AbstractController
 {
-    #[Route('/')]
+    #[Route('/', name: 'home')]
     public function index(): Response
     {
-        return $this->render('index.html.twig', [
-            'organization_name' => 'Gate City Bike Coop',
-            'organization_logo' => 'gcbc.webp'
-        ]);
+        return $this->render('index.html.twig');
     }
 }

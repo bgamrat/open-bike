@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
-use App\Config\Color;
+use App\Config\Bike\Status;
+use App\Config\Bike\Type;
+use App\Config\Bike\Color;
 use App\Repository\BikeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,13 +47,23 @@ class Bike {
     private ?string $wheelSize = null;
 
     #[ORM\Column(length: 16, nullable: true, enumType: Color::class)]
-    private ?string $color = null;
+    private ?Color $color = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $note = null;
 
+    #[ORM\Column(nullable: true, enumType: Status::class)]
+    private ?Status $status = null;
+
+    #[ORM\Column(nullable: true, enumType: Type::class)]
+    private ?Type $type = null;
+
     public function getId(): ?int {
         return $this->id;
+    }
+
+    public function setId(?int $id): void {
+        $this->id = $id;
     }
 
     public function getSerialNumber(): ?string {
@@ -104,11 +116,11 @@ class Bike {
         return $this;
     }
 
-    public function getColor(): ?string {
+    public function getColor(): ?Color {
         return $this->color;
     }
 
-    public function setColor(string $color): static {
+    public function setColor(?Color $color): static {
         $this->color = $color;
 
         return $this;
@@ -122,6 +134,30 @@ class Bike {
     public function setNote(?string $note): static
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(?Type $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }
