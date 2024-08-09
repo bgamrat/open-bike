@@ -14,9 +14,13 @@
 
 {% block body %}
     <article>
-        <h1>{{ org_name }}</h1>
-        <p><img src="{{ org_logo }}" alt="{{ org_name }} {{ 'logo' | trans }}"></p>
-        <p>{{ org_home_text | trans }} </p>
+        <div class="row">
+            <div class="col">
+                <h1>{{ org_name }}</h1>
+                <p><img src="{{ org_logo }}" alt="{{ org_name }} {{ 'logo' | trans }}"></p>
+                <p>{{ org_home_text | trans }} </p>
+            </div>
+        </div>
     </article>
 {% endblock %}
 
