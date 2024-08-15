@@ -10,15 +10,15 @@
 #}
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'open.bike' | trans }}{% endblock %}
+{% block title %}{{ 'Make Appointment' | trans }}{% endblock %}
 
 {% block body %}
     <article>
+        <h1>{{ 'Make Appointment' | trans }}</h1>
+        <p>{{ 'org-appt-rules' | trans }}
         <div class="row">
             <div class="col">
-                <h1>{{ 'org.name'| trans }}</h1>
-                <p><img src="{{ org_logo }}" alt="{{ 'org.name'|trans }} {{ 'logo' | trans }}"></p>
-                <p>{{ 'org.home.text'| trans }} </p>
+                {{ form(form) }}
             </div>
         </div>
     </article>

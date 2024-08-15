@@ -10,15 +10,18 @@
 #}
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'open.bike' | trans }}{% endblock %}
+{% block title %}{{ 'Appointment Instructions' | trans }}{% endblock %}
 
 {% block body %}
     <article>
+        <h1>{{ 'Appointment Instructions' | trans }}</h1>
+        <p>{{ 'org.appt.instructions' | trans }}
         <div class="row">
             <div class="col">
-                <h1>{{ 'org.name'| trans }}</h1>
-                <p><img src="{{ org_logo }}" alt="{{ 'org.name'|trans }} {{ 'logo' | trans }}"></p>
-                <p>{{ 'org.home.text'| trans }} </p>
+                <dl>
+                    <dt>{{ 'Date' | trans }}</dt>
+                    <dd>{{ appointment.date|date("m/d/Y") }}</dd>
+                </dl>
             </div>
         </div>
     </article>

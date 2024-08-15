@@ -11,6 +11,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Agency;
+use App\Entity\Appointment;
 use App\Entity\Bike;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -33,6 +35,8 @@ class DashboardController extends AbstractDashboardController {
     public function configureMenuItems(): iterable {
         yield MenuItem::linkToRoute('Home', 'fas fa-home', 'home');
         yield MenuItem::linkToDashboard('Dashboard', 'fas fa-gauge');
+        yield MenuItem::linkToCrud('Agencies', 'fas fa-building', Agency::class);
         yield MenuItem::linkToCrud('Bikes', 'fas fa-bicycle', Bike::class);
+        yield MenuItem::linkToCrud('Appointments', 'fas fa-calendar', Appointment::class);
     }
 }
