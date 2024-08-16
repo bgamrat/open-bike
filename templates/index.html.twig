@@ -17,8 +17,13 @@
         <div class="row">
             <div class="col">
                 <h1>{{ 'org.name'| trans }}</h1>
-                <p><img src="{{ org_logo }}" alt="{{ 'org.name'|trans }} {{ 'logo' | trans }}"></p>
+                <section id="overview">
+                <h2><img src="{{ org_logo }}" alt="{{ 'org.name'|trans }} {{ 'logo' | trans }}"></h2>
                 <p>{{ 'org.home.text'| trans }} </p>
+                </section>
+                <section id="request">
+                    {% include 'bike_request/form.html.twig' %}
+                </section>
             </div>
         </div>
     </article>

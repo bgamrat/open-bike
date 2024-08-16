@@ -3,6 +3,7 @@ twig:
     form_themes: [ 'bootstrap_4_layout.html.twig' ]
     globals:
         org_logo: '%env(ORG_LOGO)%'
+        recaptcha3_site_key: '%karser_recaptcha3.site_key%'
 
 when@test:
     twig:

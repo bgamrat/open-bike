@@ -11,18 +11,19 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Agency;
-use App\Entity\Appointment;
+use App\Config\BikeRequest\Status;
+use App\Entity\BikeRequest;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class AppointmentCrudController extends AbstractCrudController {
+class BikeRequestCrudController extends AbstractCrudController {
 
     public static function getEntityFqcn(): string {
-        return Appointment::class;
+        return BikeRequest::class;
     }
 
     public function configureFields(string $pageName): iterable {
@@ -32,7 +33,8 @@ class AppointmentCrudController extends AbstractCrudController {
             TextField::new('contact'),
             TextField::new('height'),
             DateField::new('date'),
-            AssociationField::new('referrer')
+            AssociationField::new('referrer'),
+            ChoiceField::new('status')->setChoices(Status::cases())->autocomplete(),
         ];
     }
 }

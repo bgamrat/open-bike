@@ -52,7 +52,7 @@ class Bike {
     private ?int $speeds = null;
 
     #[Assert\GreaterThan(0)]
-    #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $wheelSize = null;
 
     #[ORM\Column(length: 16, nullable: true, enumType: Color::class)]

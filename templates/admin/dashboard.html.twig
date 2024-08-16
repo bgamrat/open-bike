@@ -11,5 +11,21 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
 
 {% block main %}
-    Dashboard will be here - for now click on <a href="/admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5CBikeCrudController">Bikes</a>
+    <article>
+        <h1>{{ 'Dashboard' | trans }}</h1>
+        <div class="row">
+            <div class="col">
+                <section id="bikes">
+                    <h2>{{ 'Bikes' | trans }}</h2>
+                    {#{ render_chart(bike_chart) }#}
+                </section>
+            </div>
+            <div class="col">
+                <section id="bike_requests">
+                    <h2>{{ 'Bike Requests' | trans }}</h2>
+                    {#{ render_chart(bike_request_chart) }#}
+                </section>
+            </div>
+        </div>
+    </article>
 {% endblock main %}

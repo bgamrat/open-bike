@@ -25,13 +25,13 @@ class Agency {
     private ?string $contactPhone = null;
 
     /**
-     * @var Collection<int, Appointment>
+     * @var Collection<int, BikeRequest>
      */
-    #[ORM\OneToMany(targetEntity: Appointment::class, mappedBy: 'referrer')]
-    private Collection $appointments;
+    #[ORM\OneToMany(targetEntity: BikeRequest::class, mappedBy: 'referrer')]
+    private Collection $bikeRequests;
 
     public function __construct() {
-        $this->appointments = new ArrayCollection();
+        $this->bikeRequests = new ArrayCollection();
     }
 
     public function getId(): ?int {
@@ -69,26 +69,26 @@ class Agency {
     }
 
     /**
-     * @return Collection<int, Appointment>
+     * @return Collection<int, BikeRequest>
      */
-    public function getAppointments(): Collection {
-        return $this->appointments;
+    public function getBikeRequests(): Collection {
+        return $this->bikeRequests;
     }
 
-    public function addAppointment(Appointment $appointment): static {
-        if (!$this->appointments->contains($appointment)) {
-            $this->appointments->add($appointment);
-            $appointment->setReferrer($this);
+    public function addBikeRequest(BikeRequest $bikeRequest): static {
+        if (!$this->bikeRequests->contains($bikeRequest)) {
+            $this->bikeRequests->add($bikeRequest);
+            $bikeRequest->setReferrer($this);
         }
 
         return $this;
     }
 
-    public function removeAppointment(Appointment $appointment): static {
-        if ($this->appointments->removeElement($appointment)) {
+    public function removeBikeRequest(BikeRequest $bikeRequest): static {
+        if ($this->bikeRequests->removeElement($bikeRequest)) {
             // set the owning side to null (unless already changed)
-            if ($appointment->getReferrer() === $this) {
-                $appointment->setReferrer(null);
+            if ($bikeRequest->getReferrer() === $this) {
+                $bikeRequest->setReferrer(null);
             }
         }
 

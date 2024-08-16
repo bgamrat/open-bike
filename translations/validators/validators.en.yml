@@ -1,0 +1,5 @@
+karser_recaptcha3.message: 'Your computer or network may be sending automated queries'
+karser_recaptcha3.message_missing_value: 'The captcha value is missing'
+requester.contact.message.invalid: 'Contact information may include letters, numbers, apostrophes and the following punctuation , . ( ) & # @ ?-'
+requester.height.message.invalid: 'Please enter your height, the text may include letters, numbers, apostrophes and the following punctuation , . ( ) & # @ ?-'
+requester.name.message.invalid: 'Names must start with a letter and may include apostrophes, commas, periods and hyphens'

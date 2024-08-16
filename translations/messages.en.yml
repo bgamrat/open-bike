@@ -2,5 +2,6 @@ open.bike: open-bike
 org:
     name: open-bike
     home.text: We repair used bikes that are donated to us and offer them at no cost to low income residents
-    rules: Bicycles are given out on Mondays on a first-come, first-served basis. If you have an appointment, but do not show, you must create another appointment. There are no exceptions.
-    appt.instructions: Be on time
+    appt.instructions: Bicycles are given out on Mondays starting at 5pm on a first-come, first-served basis. If you have an appointment, but do not show, you must request another appointment. There are no exceptions. You must have your voucher with you.
+    request.bike.important: This information is very important, if it is incomplete or incorrect we will not be able to give you a bike.
+    request.bike.instructions: Enter your name, contact information, height and the agency that referred you. If you cannot pick up the bike on the date shown, please wait and make your request later. Bikes are given out on Mondays. 
