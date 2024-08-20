@@ -41,7 +41,7 @@ class BikeRequestController extends AbstractController {
         return $this->render('bike_request/new.html.twig', ['bike_request_form' => $form]);
     }
 
-    #[Route('/bike-request-instructions/{id}', name: 'bike-request-instructions')]
+    #[Route('/bike-request-instructions/{id}', name: 'bike-request-instructions', requirements: ['id' => '\d+'])]
     public function instructions(BikeRequestRepository $bikeRequestRepository, int $id): Response {
         $bikeRequest = $bikeRequestRepository
                 ->find($id);

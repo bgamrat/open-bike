@@ -12,10 +12,13 @@
 namespace App\Controller\Admin;
 
 use App\Config\Bike\Color;
+use App\Config\Bike\Size;
 use App\Config\Bike\Status;
 use App\Config\Bike\Type;
-use App\Config\Size;
+use App\Config\BikeRequest\Status as BikeRequestStatus;
 use App\Entity\Bike;
+use App\Entity\BikeRequest;
+use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -44,7 +47,9 @@ class BikeCrudController extends AbstractCrudController {
             ChoiceField::new('type')->setChoices(Type::cases())->autocomplete(),
             ChoiceField::new('status')->setChoices(Status::cases())->autocomplete(),
             TextareaField::new('note'),
-            AssociationField::new('recipient'),
+            AssociationField::new('recipient')->setQueryBuilder(
+                    fn(QueryBuilder $queryBuilder) => $queryBuilder->getEntityManager()->getRepository(BikeRequest::class)->findBy(['status' => BikeRequestStatus::Pending, 'bike' => null]))
+                ->autocomplete()
         ];
     }
 }

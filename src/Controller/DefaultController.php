@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class DefaultController extends AbstractController {
 
     #[Route('/', name: 'home')]
+    #[Route('/home', name: 'home-2')]
     public function index(): Response {
         
         $bikeRequest = new BikeRequest();

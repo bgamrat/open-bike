@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Config\BikeRequest\Status;
+use App\Entity\Agency;
 use App\Entity\Bike;
 use App\Repository\BikeRequestRepository;
 use Doctrine\DBAL\Types\Types;
@@ -48,8 +49,8 @@ class BikeRequest
     #[ORM\JoinColumn(nullable: false)]
     private ?Agency $referrer = null;
 
-    #[ORM\Column(nullable: true, enumType: Status::class)]
-    private ?Status $status = null;
+    #[ORM\Column(enumType: Status::class)]
+    private ?Status $status = Status::Pending;
 
     #[ORM\ManyToOne(inversedBy: 'recipient')]
     private ?Bike $bike = null;
@@ -141,5 +142,9 @@ class BikeRequest
         $this->bike = $bike;
 
         return $this;
+    }
+
+    public function __toString() {
+        return \sprintf('%s (%s)',$this->clientName,$this->contact);
     }
 }

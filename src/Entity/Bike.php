@@ -11,10 +11,10 @@
 
 namespace App\Entity;
 
+use App\Config\Bike\Color;
+use App\Config\Bike\Size;
 use App\Config\Bike\Status;
 use App\Config\Bike\Type;
-use App\Config\Bike\Color;
-use App\Config\Size;
 use App\Entity\BikeRequest;
 use App\Repository\BikeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,7 +41,7 @@ class Bike {
                 pattern: '/^[A-Z0-9 -]{,64}$/',
                 normalizer: trim
         )]
-    #[ORM\Column(length: 64)]
+    #[ORM\Column(length: 64, nullable: true)]
     private ?string $brand = null;
 
     #[Assert\Regex(
@@ -51,8 +51,11 @@ class Bike {
     #[ORM\Column(length: 64, nullable: true)]
     private ?string $model = null;
 
+    #[ORM\Column(nullable: true, enumType: Size::class)]
+    private ?Size $size = null;
+
     #[Assert\GreaterThan(0)]
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $speeds = null;
 
     #[Assert\GreaterThan(0)]
@@ -77,8 +80,7 @@ class Bike {
     #[ORM\OneToMany(targetEntity: BikeRequest::class, mappedBy: 'bike')]
     private Collection $recipient;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->recipient = new ArrayCollection();
     }
 
@@ -120,6 +122,16 @@ class Bike {
         return $this;
     }
 
+    public function getSize(): ?Size {
+        return $this->size;
+    }
+
+    public function setSize(?Size $size): static {
+        $this->size = $size;
+
+        return $this;
+    }
+
     public function getSpeeds(): ?int {
         return $this->speeds;
     }
@@ -150,37 +162,31 @@ class Bike {
         return $this;
     }
 
-    public function getNote(): ?string
-    {
+    public function getNote(): ?string {
         return $this->note;
     }
 
-    public function setNote(?string $note): static
-    {
+    public function setNote(?string $note): static {
         $this->note = $note;
 
         return $this;
     }
 
-    public function getStatus(): ?Status
-    {
+    public function getStatus(): ?Status {
         return $this->status;
     }
 
-    public function setStatus(?Status $status): static
-    {
+    public function setStatus(?Status $status): static {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getType(): ?Type
-    {
+    public function getType(): ?Type {
         return $this->type;
     }
 
-    public function setType(?Type $type): static
-    {
+    public function setType(?Type $type): static {
         $this->type = $type;
 
         return $this;
@@ -189,13 +195,11 @@ class Bike {
     /**
      * @return Collection<int, BikeRequest>
      */
-    public function getRecipient(): Collection
-    {
+    public function getRecipient(): Collection {
         return $this->recipient;
     }
 
-    public function addRecipient(BikeRequest $recipient): static
-    {
+    public function addRecipient(BikeRequest $recipient): static {
         if (!$this->recipient->contains($recipient)) {
             $this->recipient->add($recipient);
             $recipient->setBike($this);
@@ -204,8 +208,7 @@ class Bike {
         return $this;
     }
 
-    public function removeRecipient(BikeRequest $recipient): static
-    {
+    public function removeRecipient(BikeRequest $recipient): static {
         if ($this->recipient->removeElement($recipient)) {
             // set the owning side to null (unless already changed)
             if ($recipient->getBike() === $this) {
@@ -216,13 +219,11 @@ class Bike {
         return $this;
     }
 
-    public function getFrameSize(): ?Size
-    {
+    public function getFrameSize(): ?Size {
         return $this->frameSize;
     }
 
-    public function setFrameSize(?Size $frameSize): static
-    {
+    public function setFrameSize(?Size $frameSize): static {
         $this->frameSize = $frameSize;
 
         return $this;

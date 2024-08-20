@@ -28,7 +28,7 @@ class BikeRequestType extends AbstractType {
     public function configureOptions(OptionsResolver $resolver): void {
         $resolver->setDefaults([
             'data_class' => BikeRequest::class,
-            'action' => 'bike-request'
+            'action' => 'bike-request',           
         ]);
     }
 
