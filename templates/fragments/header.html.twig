@@ -19,9 +19,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('home') }}">Home</a>
                 </li>
+                {% if bike_inventory.bikes_available %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('bike-request') }}">{{ 'Request a bike' | trans }}</a>
                 </li>
+                {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item"><a class="nav-link" href="{{ path('admin') }}">{{ 'Admin' | trans }}</a></li>
                 {% endif %}

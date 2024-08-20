@@ -14,7 +14,11 @@ namespace App\Entity;
 use App\Config\Bike\Status;
 use App\Config\Bike\Type;
 use App\Config\Bike\Color;
+use App\Config\Size;
+use App\Entity\BikeRequest;
 use App\Repository\BikeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -66,6 +70,17 @@ class Bike {
 
     #[ORM\Column(nullable: true, enumType: Type::class)]
     private ?Type $type = null;
+
+    /**
+     * @var Collection<int, BikeRequest>
+     */
+    #[ORM\OneToMany(targetEntity: BikeRequest::class, mappedBy: 'bike')]
+    private Collection $recipient;
+
+    public function __construct()
+    {
+        $this->recipient = new ArrayCollection();
+    }
 
     public function getId(): ?int {
         return $this->id;
@@ -167,6 +182,48 @@ class Bike {
     public function setType(?Type $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BikeRequest>
+     */
+    public function getRecipient(): Collection
+    {
+        return $this->recipient;
+    }
+
+    public function addRecipient(BikeRequest $recipient): static
+    {
+        if (!$this->recipient->contains($recipient)) {
+            $this->recipient->add($recipient);
+            $recipient->setBike($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipient(BikeRequest $recipient): static
+    {
+        if ($this->recipient->removeElement($recipient)) {
+            // set the owning side to null (unless already changed)
+            if ($recipient->getBike() === $this) {
+                $recipient->setBike(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getFrameSize(): ?Size
+    {
+        return $this->frameSize;
+    }
+
+    public function setFrameSize(?Size $frameSize): static
+    {
+        $this->frameSize = $frameSize;
 
         return $this;
     }

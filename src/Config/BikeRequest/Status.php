@@ -13,7 +13,7 @@ namespace App\Config\BikeRequest;
 
 enum Status: string
 {
-    case Received = 'Received';
+    case Pending = 'Pending';
     case Delivered = 'Delivered';
     case PickedUp = 'Picked up';
     case NoVoucher = 'No voucher';

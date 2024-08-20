@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Config\BikeRequest\Status;
+use App\Entity\Bike;
 use App\Repository\BikeRequestRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,6 +50,9 @@ class BikeRequest
 
     #[ORM\Column(nullable: true, enumType: Status::class)]
     private ?Status $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'recipient')]
+    private ?Bike $bike = null;
 
     public function getId(): ?int
     {
@@ -123,6 +127,18 @@ class BikeRequest
     public function setStatus(?Status $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getBike(): ?Bike
+    {
+        return $this->bike;
+    }
+
+    public function setBike(?Bike $bike): static
+    {
+        $this->bike = $bike;
 
         return $this;
     }

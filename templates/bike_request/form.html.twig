@@ -1,6 +1,8 @@
-{% if bike_request_form %}
+{% if bike_inventory.bikes_available %}
     <h2>{{  'Request details' | trans }}</h2>
     <p><em>{{ 'org.request.bike.important'| trans }}</em></p>
     <p>{{ 'org.request.bike.instructions'| trans }}</p>
     {{ form(bike_request_form) }}
+{% else %}
+    <p>{{ 'org.no_bikes'| trans }}</p>
 {% endif %}

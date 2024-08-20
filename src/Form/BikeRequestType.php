@@ -40,7 +40,7 @@ class BikeRequestType extends AbstractType {
                 ])
                 ->add('date', DateType::class, ['required' => true,
                     'attr' => [
-                        'readonly' => true,
+                        //'readonly' => true,
                         'value' => \date('Y-m-d', \strtotime('next monday')),
                         'min' => \date('Y-m-d', \strtotime('next monday')), 'max' => \date('Y-m-d', \strtotime("+1 month")), 'step' => 7]
                 ])

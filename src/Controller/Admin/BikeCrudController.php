@@ -11,11 +11,13 @@
 
 namespace App\Controller\Admin;
 
+use App\Config\Bike\Color;
 use App\Config\Bike\Status;
 use App\Config\Bike\Type;
-use App\Config\Bike\Color;
+use App\Config\Size;
 use App\Entity\Bike;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -35,12 +37,14 @@ class BikeCrudController extends AbstractCrudController {
             TextField::new('serialNumber'),
             TextField::new('brand'),
             TextField::new('model'),
+            ChoiceField::new('size')->setChoices(Size::cases())->autocomplete(),
             IntegerField::new('speeds'),
             NumberField::new('wheelSize'),
             ChoiceField::new('color')->setChoices(Color::cases())->autocomplete(),
             ChoiceField::new('type')->setChoices(Type::cases())->autocomplete(),
             ChoiceField::new('status')->setChoices(Status::cases())->autocomplete(),
-            TextareaField::new('note')
+            TextareaField::new('note'),
+            AssociationField::new('recipient'),
         ];
     }
 }

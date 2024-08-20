@@ -17,3 +17,6 @@ Defining bikes, establishing application architecture
 
 # Access Control
 To create an admin user use `bin/console app:add-admin email@example.com password`
+
+# Caution
+The database migration stuff is all messed up. I'll fix it later. Sorry
