@@ -25,44 +25,39 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class AppAuthenticator extends AbstractLoginFormAuthenticator
-{
+class AppAuthenticator extends AbstractLoginFormAuthenticator {
+
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(private UrlGeneratorInterface $urlGenerator) {
+        
     }
 
-    public function authenticate(Request $request): Passport
-    {
+    public function authenticate(Request $request): Passport {
         $email = $request->getPayload()->getString('email');
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
-            new UserBadge($email),
-            new PasswordCredentials($request->getPayload()->getString('password')),
-            [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
-                new RememberMeBadge(),
-            ]
+                new UserBadge($email),
+                new PasswordCredentials($request->getPayload()->getString('password')),
+                [
+            new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
+            new RememberMeBadge(),
+                ]
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-
-
         return new RedirectResponse('home');
     }
 
-    protected function getLoginUrl(Request $request): string
-    {
+    protected function getLoginUrl(Request $request): string {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 }

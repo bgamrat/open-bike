@@ -27,6 +27,9 @@
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item"><a class="nav-link" href="{{ path('admin') }}">{{ 'Admin' | trans }}</a></li>
                 {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item"><a class="nav-link" href="{{ path('settings') }}">{{ 'Settings' | trans }}</a></li>
+                {% endif %}
                 {#
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
