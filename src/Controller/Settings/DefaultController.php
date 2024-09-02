@@ -12,47 +12,54 @@
 namespace App\Controller\Settings;
 
 use App\Configuration\InventoryConfiguration;
-use App\Service\InventoryConfigurationFormService;
+use App\Service\ConfigurationFormService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Yaml\Yaml;
-use function dump;
 
 class DefaultController extends AbstractController {
 
-    public function __construct(private InventoryConfigurationFormService $configurationFormService) {
+    public function __construct(private ConfigurationFormService $configurationFormService) {
         
     }
 
-    #[Route('/settings', name: 'settings')]
-    public function index(Request $request): Response {
+    #[Route('/settings/{type}', name: 'settings', requirements: ['type' => 'inventory|distribution'])]
+    public function index(Request $request, string $type): Response {
 
-        $inventoryConfig = Yaml::parse(
-                        \file_get_contents($this->getParameter('kernel.project_dir') . '/config/app/inventory.yml')
+        $yamlFilename = $this->getParameter('kernel.project_dir') . '/config/app/' . $type . '.yml';
+
+        if (!is_file($yamlFilename)) {
+            $this->createNotFoundException($yamlFilename);
+        }
+
+        $yaml = Yaml::parse(
+                        \file_get_contents($yamlFilename)
         );
         $inventoryConfiguration = new InventoryConfiguration();
 
-        $form = $this->configurationFormService->form($inventoryConfiguration, $inventoryConfig);
+        $form = $this->configurationFormService->form($type, $inventoryConfiguration, $yaml);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $formConfigValues = ['inventory' => ['inventory' => $form->getData()]];
-            
-            $processor = new Processor();
-            $processedConfiguration = $processor->processConfiguration(
-                    $inventoryConfiguration, $formConfigValues
-            );
-            $yaml = Yaml::dump($processedConfiguration);
+            $formData = [$type => [$type => $form->getData()]];
 
-            file_put_contents($this->getParameter('kernel.project_dir') . '/config/app/inventory.yml', $yaml);
-            return $this->redirectToRoute('home');
+            $configs = [$formData];
+            $processor = new Processor();
+            try {
+                $processedConfiguration = $processor->processConfiguration(
+                        $inventoryConfiguration, $configs
+                );
+                $updatedYaml = Yaml::dump($processedConfiguration);
+                file_put_contents($yamlFilename, $updatedYaml);
+                return $this->redirectToRoute('settings');
+            } catch (InvalidTypeException |
+                    InvalidConfigurationException $e) {
+                $formError = new FormError($e->getMessage());
+                $form->addError($formError);
+            }
         }
 
         return $this->render('settings/index.html.twig', ['form' => $form]);

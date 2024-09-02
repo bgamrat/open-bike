@@ -12,6 +12,8 @@
 namespace App\Service;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -19,22 +21,20 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Description of ConfigFormCreator
  *
  * @author bgamrat
  */
-class InventoryConfigurationFormService {
+class ConfigurationFormService {
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator, private FormFactoryInterface $formFactory) {
+    public function __construct(private FormFactoryInterface $formFactory) {
         
     }
 
-    public function form(ConfigurationInterface $configuration, mixed $yaml): Form {
-        $formBuilder = $this->formFactory->createNamedBuilder('inventory');
-        $formBuilder->setAction($this->urlGenerator->generate('settings'));
+    public function form(string $name, ConfigurationInterface $configuration, mixed $yaml): Form {
+        $formBuilder = $this->formFactory->createNamedBuilder($name);
         $formBuilder->setMethod('post');
 
         $configs = [$yaml];
@@ -43,7 +43,7 @@ class InventoryConfigurationFormService {
                 $configuration, $configs
         );
 
-        $this->traverse($formBuilder, 'inventory', $processedConfiguration);
+        $this->traverse($formBuilder, $name, $processedConfiguration);
         $formBuilder->add('save', SubmitType::class);
 
         return $formBuilder->getForm();
@@ -60,11 +60,4 @@ class InventoryConfigurationFormService {
         }
     }
 
-    public function validate(ConfigurationInterface $configuration, mixed $yaml, mixed $configs) {
-        $configs = [$yaml];
-        $processor = new Processor();
-        $processedConfiguration = $processor->processConfiguration(
-                $configuration, $configs
-        );
-    }
 }
