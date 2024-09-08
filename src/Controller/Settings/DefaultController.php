@@ -11,50 +11,42 @@
 
 namespace App\Controller\Settings;
 
-use App\Configuration\InventoryConfiguration;
 use App\Service\ConfigurationFormService;
+use App\Service\ConfigurationService;
+use App\Service\LanguageFormService;
+use App\Service\LanguageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Exception\InvalidConfigurationException;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyAccess\Exception\InvalidTypeException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Yaml\Yaml;
 
 class DefaultController extends AbstractController {
 
-    public function __construct(private ConfigurationFormService $configurationFormService) {
+    public function __construct(
+            private ConfigurationService $configurationService,
+            private ConfigurationFormService $configurationFormService,
+            private LanguageService $languageService,
+            private LanguageFormService $languageFormService) {
         
     }
 
     #[Route('/settings/{type}', name: 'settings', requirements: ['type' => 'inventory|distribution'])]
     public function index(Request $request, string $type): Response {
 
-        $yamlFilename = $this->getParameter('kernel.project_dir') . '/config/app/' . $type . '.yml';
-
-        if (!is_file($yamlFilename)) {
-            $this->createNotFoundException($yamlFilename);
-        }
-
-        $yaml = Yaml::parse(
-                        \file_get_contents($yamlFilename)
-        );
-        $inventoryConfiguration = new InventoryConfiguration();
-
-        $form = $this->configurationFormService->form($type, $inventoryConfiguration, $yaml);
+        $configuration = $this->configurationService->getConfiguration($type);
+        $yaml = $this->configurationService->getYamlConfiguration($type);
+        $form = $this->configurationFormService->form($type, $configuration, $yaml);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $formData = [$type => [$type => $form->getData()]];
-
-            $configs = [$formData];
-            $processor = new Processor();
+            $formData = [$type => $form->getData()];
+            $updatedConfigurationData = [$formData];
             try {
-                $processedConfiguration = $processor->processConfiguration(
-                        $inventoryConfiguration, $configs
-                );
-                $updatedYaml = Yaml::dump($processedConfiguration);
-                file_put_contents($yamlFilename, $updatedYaml);
-                return $this->redirectToRoute('settings');
+                $this->configurationService->updateYamlConfiguration($type, $configuration, $updatedConfigurationData);
+                return $this->redirectToRoute('settings', ['type' => $type]);
             } catch (InvalidTypeException |
                     InvalidConfigurationException $e) {
                 $formError = new FormError($e->getMessage());
@@ -63,5 +55,20 @@ class DefaultController extends AbstractController {
         }
 
         return $this->render('settings/index.html.twig', ['form' => $form]);
+    }
+
+    #[Route('/language/{language}/{type}', name: 'language', requirements: ['language' => '[a-z]{2}', 'type' => 'messages',])]
+    public function language(Request $request, string $language = 'en', string $type = 'messages'): Response {
+        $languageText = $this->languageService->getLanguage($language, $type);
+        $form = $this->languageFormService->form($type, $languageText);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $updatedLanguageText = $form->getData();
+            $this->languageService->updateLanguage($language, $type, $updatedLanguageText);
+            return $this->redirectToRoute('language', ['type' => $type, 'language' => $language]);
+        }
+
+        return $this->render('settings/language.html.twig', ['form' => $form, 'type' => $type, 'language' => $language]);
     }
 }

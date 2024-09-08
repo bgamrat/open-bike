@@ -12,11 +12,10 @@
 namespace App\Service;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
@@ -54,10 +53,14 @@ class ConfigurationFormService {
             if (is_array($v)) {
                 $this->traverse($formBuilder, $name, $v);
             } else {
-                $type = is_int($v) ? IntegerType::class : TextType::class;
-                $formBuilder->add($name, $type, ['data' => $v]);
+                if (is_int($v)) {
+                    $formBuilder->add($name, IntegerType::class, ['data' => $v]);
+                } else {
+                    $type = strpos($v, '\n') !== false ? TextType::class : TextareaType::class;
+                    $formBuilder->add($name, $type,
+                            ['data' => $v, 'sanitize_html' => true, 'trim' => true]);
+                }
             }
         }
     }
-
 }

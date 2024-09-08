@@ -14,6 +14,7 @@ namespace App\Controller;
 use App\Entity\BikeRequest;
 use App\Form\BikeRequestType;
 use App\Repository\BikeRequestRepository;
+use App\Service\ConfigurationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,12 +40,15 @@ class BikeRequestController extends AbstractController {
     }
 
     #[Route('/bike-request-instructions/{id}', name: 'bike-request-instructions', requirements: ['id' => '\d+'])]
-    public function instructions(BikeRequestRepository $bikeRequestRepository, int $id): Response {
+    public function instructions(ConfigurationService $configurationService,BikeRequestRepository $bikeRequestRepository, int $id): Response {
         $bikeRequest = $bikeRequestRepository
                 ->find($id);
         if ($bikeRequest == null) {
             die();
         }
-        return $this->render('bike_request/instructions.html.twig', ['bike_request' => $bikeRequest]);
+        $distribution = $configurationService->getYamlConfiguration('distribution');
+        return $this->render('bike_request/instructions.html.twig',
+                        ['bike_request' => $bikeRequest,
+                            'distribution' => $distribution]);
     }
 }

@@ -37,6 +37,14 @@
                             <li><a class="dropdown-item" href="{{ path('settings', { type: 'inventory' }) }}">{{ 'Inventory' | trans }}</a></li>
                         </ul>
                     </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ 'Language' | trans }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ path('language', { type: 'messages', language: 'en' }) }}">{{ 'en-US' | trans }}</a></li>
+                        </ul>
+                    </li>
                 {% endif %}
                 {#
                 <li class="nav-item">

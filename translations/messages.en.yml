@@ -1,8 +1,10 @@
-open.bike: open-bike
-org:
-    name: open-bike
-    home.text: We repair used bikes that are donated to us and offer them at no cost to low income residents
-    appt.instructions: Bicycles are given out on Mondays starting at 5pm on a first-come, first-served basis. If you have an appointment, but do not show, you must request another appointment. There are no exceptions. You must have your voucher with you.
-    no_bikes: There are no bikes available, please check again later
-    request.bike.important: This information is very important, if it is incomplete or incorrect we will not be able to give you a bike.
-    request.bike.instructions: Enter your name, contact information, height and the agency that referred you. If you cannot pick up the bike on the date shown, please wait and make your request later. Bikes are given out on Mondays. 
+organization_name: open-bike
+home_page_text: 'We repair used bikes that are donated to us and offer them at no cost to low income residents'
+appointment_instructions: 'Bicycles are given out on Mondays starting at 5pm on a first-come, first-served basis. If you have an appointment, but do not show, you must request another appointment. There are no exceptions. You must have your voucher with you.'
+no_bikes: 'There are no bikes available, please check again later'
+request_bike_important: 'This information is very important, if it is incomplete or incorrect we will not be able to give you a bike.'
+request_bike_instructions: 'Enter your name, contact information, height and the agency that referred you. If you cannot pick up the bike on the date shown, please wait and make your request later. Bikes are given out on Mondays.'
+distribution: Tidy
+distribution_location_days_and_times: "17 Airport Road\nNashua\nMondays from 5 to 7pm"
+distribution_policy: "Must have a voucher\nOne bike per year\nIf you miss your appointment, you must reschedule\nMust be 18 or over"
+powered_by: Powered by

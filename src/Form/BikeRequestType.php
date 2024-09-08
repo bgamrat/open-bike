@@ -28,15 +28,15 @@ class BikeRequestType extends AbstractType {
     public function configureOptions(OptionsResolver $resolver): void {
         $resolver->setDefaults([
             'data_class' => BikeRequest::class,
-            'action' => 'bike-request',           
+            'action' => 'bike-request',
         ]);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
-                ->add('clientName', TextType::class, ['required' => true,
+                ->add('clientName', TextType::class, ['required' => true, 'sanitize_html' => true
                 ])
-                ->add('contact', TextType::class, ['required' => true,
+                ->add('contact', TextType::class, ['required' => true, 'sanitize_html' => true
                 ])
                 ->add('date', DateType::class, ['required' => true,
                     'attr' => [
@@ -44,7 +44,7 @@ class BikeRequestType extends AbstractType {
                         'value' => \date('Y-m-d', \strtotime('next monday')),
                         'min' => \date('Y-m-d', \strtotime('next monday')), 'max' => \date('Y-m-d', \strtotime("+1 month")), 'step' => 7]
                 ])
-                ->add('height', TextType::class, ['required' => true,
+                ->add('height', TextType::class, ['required' => true, 'sanitize_html' => true
                 ])
                 ->add('referrer', EntityType::class, [
                     'required' => true,
