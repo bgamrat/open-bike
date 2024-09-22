@@ -30,6 +30,9 @@ class Agency {
     #[ORM\OneToMany(targetEntity: BikeRequest::class, mappedBy: 'referrer')]
     private Collection $bikeRequests;
 
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $contactEmail = null;
+
     public function __construct() {
         $this->bikeRequests = new ArrayCollection();
     }
@@ -95,7 +98,19 @@ class Agency {
         return $this;
     }
 
+    public function getContactEmail(): ?string
+    {
+        return $this->contactEmail;
+    }
+
+    public function setContactEmail(?string $contactEmail): static
+    {
+        $this->contactEmail = $contactEmail;
+
+        return $this;
+    }
+
     public function __toString() {
-        return $this->name; 
+        return $this->name;
     }
 }

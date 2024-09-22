@@ -17,12 +17,15 @@ use App\Config\Bike\Status;
 use App\Config\Bike\Type;
 use App\Entity\BikeRequest;
 use App\Repository\BikeRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: BikeRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Bike {
 
     #[ORM\Id]
@@ -79,6 +82,10 @@ class Bike {
      */
     #[ORM\OneToMany(targetEntity: BikeRequest::class, mappedBy: 'bike')]
     private Collection $recipient;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Gedmo\Timestampable]
+    public ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct() {
         $this->recipient = new ArrayCollection();
@@ -227,5 +234,14 @@ class Bike {
         $this->frameSize = $frameSize;
 
         return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

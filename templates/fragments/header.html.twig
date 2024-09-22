@@ -26,8 +26,8 @@
                 {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item"><a class="nav-link" href="{{ path('admin') }}">{{ 'Admin' | trans }}</a></li>
-                {% endif %}
-                {% if is_granted('ROLE_ADMIN') %}
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ 'Settings' | trans }}
@@ -37,8 +37,8 @@
                             <li><a class="dropdown-item" href="{{ path('settings', { type: 'inventory' }) }}">{{ 'Inventory' | trans }}</a></li>
                         </ul>
                     </li>
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ 'Language' | trans }}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -75,11 +75,11 @@
             <ul class="navbar-nav align-self-end mb-2 mb-lg-0">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li class="nav-item"><a href="/logout" title="{{ 'Log out' | trans }}"><i class="bi bi-box-arrow-left fs-3 lh-1 p-0 m-0"></i></a></li>
-                        {%  else %}
-                            {% if app.current_route != 'app_login' %}
+                {%  else %}
+                    {% if app.current_route != 'app_login' %}
                         <li class="nav-item"><a href="/login" title="{{ 'Log in' | trans }}"><i class="bi bi-box-arrow-right fs-3 lh-1 p-0 m-0"></i></a></li>
-                            {% endif %}
-                        {% endif %}
+                    {% endif %}
+                {% endif %}
             </ul>
 
         </div>

@@ -14,18 +14,19 @@ namespace App\Controller\Admin;
 use App\Entity\Agency;
 use App\Entity\Bike;
 use App\Entity\BikeRequest;
+use App\Entity\Volunteer;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
-use Symfony\UX\Chartjs\Model\Chart;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 class DashboardController extends AbstractDashboardController {
 
     public function __construct(
-            //  private ChartBuilderInterface $chartBuilder,
+            private ChartBuilderInterface $chartBuilder,
     ) {
         
     }
@@ -33,9 +34,9 @@ class DashboardController extends AbstractDashboardController {
     #[Route('/admin', name: 'admin')]
     public function index(): Response {
         // TODO: add charts
-        //$bikeChart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+        $bikeChart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
         //$bikeRequestChart = $this->chartBuilder->createChart(Chart::TYPE_GEAR);
-        return $this->render('admin/dashboard.html.twig'); //,['bike_chart' => $bikeChart, 'bike_request_chart' => $bikeRequestChart]);
+        return $this->render('admin/dashboard.html.twig',['bike_chart' => $bikeChart]);//, 'bike_request_chart' => $bikeRequestChart]);
     }
 
     public function configureDashboard(): Dashboard {
@@ -47,6 +48,7 @@ class DashboardController extends AbstractDashboardController {
         yield MenuItem::linkToRoute('Home', 'fas fa-home', 'home');
         yield MenuItem::linkToDashboard('Dashboard', 'fas fa-gauge');
         yield MenuItem::linkToCrud('Bikes', 'fas fa-bicycle', Bike::class);
+        yield MenuItem::linkToCrud('Volunteers', 'fas fa-person', Volunteer::class);
         yield MenuItem::linkToCrud('Bike Requests', 'fas fa-calendar', BikeRequest::class);
         yield MenuItem::linkToCrud('Agencies', 'fas fa-building', Agency::class);
     }

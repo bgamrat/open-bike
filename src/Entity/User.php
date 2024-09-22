@@ -28,8 +28,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     private ?int $id = null;
 
     #[Assert\Email(
-        normalizer: trim
-    )]
+                normalizer: trim
+        )]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
@@ -47,6 +47,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
 
     #[ORM\Column]
     private bool $isVerified = false;
+
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Volunteer $volunteer = null;
 
     public function getId(): ?int {
         return $this->id;
@@ -122,5 +125,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+
+    public function getVolunteer(): ?Volunteer {
+        return $this->volunteer;
+    }
+
+    public function setVolunteer(?Volunteer $volunteer): static {
+        // unset the owning side of the relation if necessary
+        if ($volunteer === null && $this->volunteer !== null) {
+            $this->volunteer->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($volunteer !== null && $volunteer->getUserId() !== $this) {
+            $volunteer->setUser($this);
+        }
+
+        $this->volunteer = $volunteer;
+
+        return $this;
+    }
+
+    public function __toString() {
+        return $this->email;
     }
 }
