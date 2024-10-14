@@ -8,80 +8,87 @@
  * file that was distributed with this source code.
  */
 #}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/"><i class="bi bi-bicycle fs-1 lh-1 p-0 m-0"></i></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('home') }}">Home</a>
-                </li>
-                {% if bike_inventory.bikes_available %}
+<header class="w-100">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><i class="bi bi-bicycle fs-1 lh-1 p-0 m-0"></i></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('bike-request') }}">{{ 'Request a bike' | trans }}</a>
+                        <a class="nav-link" href="{{ path('home') }}">Home</a>
                     </li>
-                {% endif %}
-                {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('admin') }}">{{ 'Admin' | trans }}</a></li>
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('calendar') }}">Calendar</a>
+                        </li>
+                    {%  endif %}
+                    {% if bike_inventory.bikes_available %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('bike-request') }}">{{ 'Request a bike' | trans }}</a>
+                        </li>
                     {% endif %}
                     {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ 'Settings' | trans }}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ path('settings', { type: 'distribution' }) }}">{{ 'Distribution' | trans }}</a></li>
-                            <li><a class="dropdown-item" href="{{ path('settings', { type: 'inventory' }) }}">{{ 'Inventory' | trans }}</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ 'Language' | trans }}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ path('language', { type: 'messages', language: 'en' }) }}">{{ 'en-US' | trans }}</a></li>
-                        </ul>
-                    </li>
-                {% endif %}
-                {#
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-                #}
-            </ul>
-            {#
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-            #}
-            <ul class="navbar-nav align-self-end mb-2 mb-lg-0">
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <li class="nav-item"><a href="/logout" title="{{ 'Log out' | trans }}"><i class="bi bi-box-arrow-left fs-3 lh-1 p-0 m-0"></i></a></li>
-                {%  else %}
-                    {% if app.current_route != 'app_login' %}
-                        <li class="nav-item"><a href="/login" title="{{ 'Log in' | trans }}"><i class="bi bi-box-arrow-right fs-3 lh-1 p-0 m-0"></i></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('admin') }}">{{ 'Admin' | trans }}</a></li>
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ 'Settings' | trans }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{{ path('settings', { type: 'distribution' }) }}">{{ 'Distribution' | trans }}</a></li>
+                                <li><a class="dropdown-item" href="{{ path('settings', { type: 'inventory' }) }}">{{ 'Inventory' | trans }}</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ 'Language' | trans }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{{ path('language', { type: 'messages', language: 'en' }) }}">{{ 'en-US' | trans }}</a></li>
+                            </ul>
+                        </li>
                     {% endif %}
-                {% endif %}
-            </ul>
+                    {#
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                    #}
+                </ul>
+                {#
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                #}
+                <ul class="navbar-nav align-self-end mb-2 mb-lg-0">
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <li class="nav-item"><a href="/logout" title="{{ 'Log out' | trans }}"><i class="bi bi-box-arrow-left fs-3 lh-1 p-0 m-0"></i></a></li>
+                    {%  else %}
+                        {% if app.current_route != 'app_login' %}
+                            <li class="nav-item"><a href="/login" title="{{ 'Log in' | trans }}"><i class="bi bi-box-arrow-right fs-3 lh-1 p-0 m-0"></i></a></li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
 
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</header>

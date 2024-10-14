@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'common.calendar'|trans }}{% endblock %}
+
+{% block body %}
+
+    <h1 class="border-bottom">{{ 'Calendar' | trans}}</h1>
+    
+    <div class="row">
+        <div class="col-sm-12 justify-self-right"><small>{{ date() | date('m/d/Y') }}</small></div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('calendar',{'year': prev_year,'month': prev_month }) }}"><i class="bi bi-caret-left fs-1"></i></a>
+        </div>
+        <div class="col">
+            <h2 class="text-center">{{ calendar_month | date('F Y') }}</h2>
+        </div>
+        <div class="col text-end">
+            <a href="{{ path('calendar',{'year': next_year,'month': next_month }) }}"><i class="bi bi-caret-right fs-1"></i></a>
+        </div>
+    </div>
+
+    <div class="row row-cols-7">
+        {%  for day in day_names %}
+        <div class="col border bg-info opacity-75 text-white">
+            <span class="d-none d-sm-block font-weight-bold text-uppercase text-center">{{ day | trans }}</span>
+            <span class="d-block d-sm-none font-weight-bold text-uppercase text-center">{{ day | trans | slice(0,1) }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% for week in calendar %}
+        <div class="row row-cols-7 ">
+            {%  for day in week %}
+            <div class="col border">
+                <p class="d-none d-sm-block fs-6">{{ day | trans }}</p>
+                <p class="d-block d-sm-none fs-6">{{ day | trans }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {%  endfor %}
+    
+{% endblock %}
+
+{% block modal_text %}
+    <p>Calendar</p>
+{% endblock %}
