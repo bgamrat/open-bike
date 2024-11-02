@@ -14,6 +14,7 @@ namespace App\Controller\Admin;
 use App\Entity\Agency;
 use App\Entity\Bike;
 use App\Entity\BikeRequest;
+use App\Entity\Event;
 use App\Entity\Volunteer;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -28,7 +29,7 @@ class DashboardController extends AbstractDashboardController {
     public function __construct(
             private ChartBuilderInterface $chartBuilder,
     ) {
-        
+
     }
 
     #[Route('/admin', name: 'admin')]
@@ -49,7 +50,8 @@ class DashboardController extends AbstractDashboardController {
         yield MenuItem::linkToDashboard('Dashboard', 'fas fa-gauge');
         yield MenuItem::linkToCrud('Bikes', 'fas fa-bicycle', Bike::class);
         yield MenuItem::linkToCrud('Volunteers', 'fas fa-person', Volunteer::class);
-        yield MenuItem::linkToCrud('Bike Requests', 'fas fa-calendar', BikeRequest::class);
+        yield MenuItem::linkToCrud('Events', 'fas fa-calendar', Event::class);
+        yield MenuItem::linkToCrud('Bike Requests', 'fas fa-hand-pointer', BikeRequest::class);
         yield MenuItem::linkToCrud('Agencies', 'fas fa-building', Agency::class);
     }
 }

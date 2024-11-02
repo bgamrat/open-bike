@@ -16,12 +16,27 @@ class Agency {
     private ?int $id = null;
 
     #[ORM\Column(length: 128)]
+    #[Assert\Regex(
+                pattern: '/^[a-z] ?[a-z\',. -]{2,127}$/i',
+                message: 'requester.name.message.invalid',
+                normalizer: trim
+        )]
     private ?string $name = null;
 
     #[ORM\Column(length: 128)]
+    #[Assert\Regex(
+                pattern: '/^[a-z] ?[a-z\',. -]{2,127}$/i',
+                message: 'requester.name.message.invalid',
+                normalizer: trim
+        )]
     private ?string $pointOfContact = null;
 
     #[ORM\Column(length: 128)]
+    #[Assert\Regex(
+                pattern: '/^[\w\',. ()-]{8,128}$/i',
+                message: 'requester.phone.message.invalid',
+                normalizer: trim
+        )]
     private ?string $contactPhone = null;
 
     /**
@@ -98,13 +113,11 @@ class Agency {
         return $this;
     }
 
-    public function getContactEmail(): ?string
-    {
+    public function getContactEmail(): ?string {
         return $this->contactEmail;
     }
 
-    public function setContactEmail(?string $contactEmail): static
-    {
+    public function setContactEmail(?string $contactEmail): static {
         $this->contactEmail = $contactEmail;
 
         return $this;
