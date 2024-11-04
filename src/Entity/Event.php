@@ -84,6 +84,10 @@ class Event {
         return $this;
     }
 
+    public function isMultiDay(): bool {
+        return $this->start->diff($this->end)->days != 0;
+    }
+
     public function getNote(): ?string {
         return $this->note;
     }
@@ -94,15 +98,17 @@ class Event {
         return $this;
     }
 
-    public function getHost(): ?Volunteer
-    {
+    public function getHost(): ?Volunteer {
         return $this->host;
     }
 
-    public function setHost(?Volunteer $host): static
-    {
+    public function setHost(?Volunteer $host): static {
         $this->host = $host;
 
         return $this;
+    }
+
+    public function __toString() {
+        return \sprintf('%s %s (%s)', $this->type->value, $this->name, $this->host);
     }
 }

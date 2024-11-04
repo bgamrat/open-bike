@@ -38,16 +38,93 @@
                     <div class="fs-6">
                         {{ day | trans }}
                     </div>
-                    <div>
-                        {% if events[day] is defined  %}
-                            {% for e in events[day] %}
-                                {{ e.name }}
-                            {% endfor %}
-                        {% endif %}
-                    </div>
+                    <ul class="list-unstyled">
+                        {% if bike_requests[day] is defined  %}
+                            {% for br in bike_requests[day] %}
+                                <li>{{ _self.bike_request_modal(br)}}</li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if events[day] is defined  %}
+                                {% for e in events[day] %}
+                                <li>{{ _self.event_modal(e)}}</li>
+                                {% endfor %}
+                            {% endif %}
+                    </ul>
                 </div>
             {% endfor %}
         </div>
     {%  endfor %}
 
 {% endblock %}
+
+{% macro bike_request_modal(br) %}
+    <button type="button" class="btn btn-info btn-sm text-start" data-bs-toggle="modal" data-bs-target="#br{{ br.id }}">
+        {{ br.clientName }}
+    </button>
+    <div class="modal" id="br{{ br.id }}" tabindex="-1" aria-labelledby="br{{ br.id }}Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="br{{ br.id }}Label">{{ br.clientName }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <dl>
+                        <div>
+                            <dt>{{ 'Height' | trans }}</dt>
+                            <dd>{{ br.height }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ 'Contact' | trans }}</dt>
+                            <dd>{{ br.contact }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ 'Request status' | trans }}</dt>
+                            <dd class="bike-request-{{ br.status.value }}">{{ br.status.value }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ 'Referred by' | trans }}</dt>
+                            <dd>{{ br.referrer.name }} {{ br.referrer.pointOfContact }}<br>
+                                {{ br.referrer.contactPhone }}<br>
+                                {{ br.referrer.contactEmail }}
+                            </dd>
+                        </div>
+                    </dl>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <p>
+                            <a href="/admin?crudAction=edit&crudControllerFqcn=App%5CController%5CAdmin%5CBikeRequestCrudController&entityId={{ br.id }}">{{ 'Edit' | trans }}</a>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro event_modal(e) %}
+    <button type="button" class="btn btn-info btn-sm text-start" data-bs-toggle="modal" data-bs-target="#event{{ e.id }}">
+        {{ e.type.value | trans }} {{ e.name }} ({{ e.host }})
+    </button>
+    {# if an event spans more than one days, only create one modal and refer all the other days to the first one #}
+    {%  if not e.isMultiDay %}
+        <div class="modal" id="event{{ e.id }}" tabindex="-1" aria-labelledby="event{{ e.id }}Label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="event{{ e.id }}Label">{{ e.type.value | trans }} {{ e.name }} ({{ e.host }})</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ e.start | date('m/d')}}{%  if e.isMultiDay %} - {{ e.end | date('m/d') }}{% endif %}</p>
+                        <p>{{ e.note }}</p>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <p>
+                                <a href="/admin?crudAction=edit&crudControllerFqcn=App%5CController%5CAdmin%5CEventCrudController&entityId={{ e.id }}">{{ 'Edit' | trans }}</a>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

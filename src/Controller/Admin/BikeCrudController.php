@@ -19,6 +19,7 @@ use App\Config\BikeRequest\Status as BikeRequestStatus;
 use App\Entity\Bike;
 use App\Entity\BikeRequest;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminCrud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -28,6 +29,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
+#[AdminCrud(routePath: '/bikes', routeName: 'bikes')]
 class BikeCrudController extends AbstractCrudController {
 
     public static function getEntityFqcn(): string {

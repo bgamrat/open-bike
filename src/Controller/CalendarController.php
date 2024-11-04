@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Event;
 use App\Service\CalendarService;
+use App\Service\EventService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class CalendarController extends AbstractController {
 
     #[Route('/calendar/{year}/{month}', name: 'calendar', requirements: ['year' => '\d{4}', 'month' => '\d\d?'])]
-    public function indexAction(EntityManagerInterface $entityManager, Request $request, int $year = null, int $month = null) {
+    public function indexAction(EventService $eventService, Request $request, int $year = null, int $month = null) {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
 
         if ($year === null || $month === null) {
@@ -38,16 +38,8 @@ class CalendarController extends AbstractController {
         $dayNames = CalendarService::getDayNames();
         $calendar = CalendarService::getCalendar($calendarMonth);
         $lastDayOfMonth = CalendarService::getLastDayOfMonth($calendarMonth);
-        $events = $entityManager->getRepository(Event::class)->findByDateRange($calendarMonth->getTimestamp(), $lastDayOfMonth);
-
-        $eventMap = [];
-        foreach ($events as $e) {
-            $startDay = $e->getStart()->format('j');
-            $endDay = $e->getEnd()->format('j');
-            for ($day = $startDay; $day <= $endDay; $day++) {
-                $eventMap[$day][] = $e;
-            }
-        }
+        $bikeRequestMap = $eventService->getBikeRequestMap($calendarMonth, $lastDayOfMonth);
+        $eventMap = $eventService->getEventMap($calendarMonth, $lastDayOfMonth);
 
         return $this->render('calendar/index.html.twig', array(
                     'calendar_month' => $calendarMonth,
@@ -57,6 +49,7 @@ class CalendarController extends AbstractController {
                     'next_month' => $nextMonth,
                     'day_names' => $dayNames,
                     'calendar' => $calendar,
+                    'bike_requests' => $bikeRequestMap,
                     'events' => $eventMap
         ));
     }

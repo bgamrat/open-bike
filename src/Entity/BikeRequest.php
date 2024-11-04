@@ -17,7 +17,7 @@ class BikeRequest
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    
+
     #[Assert\Regex(
                 pattern: '/^[a-z] ?[a-z\',. -]{2,60}$/i',
                 message: 'requester.name.message.invalid',

@@ -1315,12 +1315,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "0129eb969c19c31b301de596439cc7f9a2c51e5a"
+                "reference": "9e0ef393b7016a5bb475d612ab60959d823a45c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/0129eb969c19c31b301de596439cc7f9a2c51e5a",
-                "reference": "0129eb969c19c31b301de596439cc7f9a2c51e5a",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/9e0ef393b7016a5bb475d612ab60959d823a45c4",
+                "reference": "9e0ef393b7016a5bb475d612ab60959d823a45c4",
                 "shasum": ""
             },
             "require": {
@@ -1362,7 +1362,7 @@
                 "symfony/debug-bundle": "^5.4|^6.0|^7.0",
                 "symfony/dom-crawler": "^5.4|^6.0|^7.0",
                 "symfony/expression-language": "^5.4|^6.0|^7.0",
-                "symfony/phpunit-bridge": "^5.4|^6.0|^7.0"
+                "symfony/phpunit-bridge": "^6.1|^7.0"
             },
             "default-branch": true,
             "type": "symfony-bundle",
@@ -1403,7 +1403,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-22T17:27:55+00:00"
+            "time": "2024-11-03T17:28:16+00:00"
         },
         {
             "name": "egulias/email-validator",

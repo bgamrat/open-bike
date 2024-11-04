@@ -9,27 +9,25 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<BikeRequest>
  */
-class BikeRequestRepository extends ServiceEntityRepository
-{
-    public function __construct(ManagerRegistry $registry)
-    {
+class BikeRequestRepository extends ServiceEntityRepository {
+
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, BikeRequest::class);
     }
 
-    //    /**
-    //     * @return Appointment[] Returns an array of Appointment objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return BikeRequest[] Returns an array of BikeRequest objects
+     */
+    public function findByDateRange($start, $end): array {
+        return $this->createQueryBuilder('br')
+                        ->where('br.date BETWEEN :start AND :end')
+                        ->setParameter('start', $start)
+                        ->setParameter('end', $end)
+                        ->orderBy('br.date', 'ASC')
+                        ->getQuery()
+                        ->getResult()
+        ;
+    }
 
     //    public function findOneBySomeField($value): ?Appointment
     //    {

@@ -16,6 +16,7 @@ use App\Entity\Bike;
 use App\Entity\BikeRequest;
 use App\Entity\Event;
 use App\Entity\Volunteer;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -24,6 +25,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 
+#[AdminDashboard(routes: [
+    'index' => ['routePath' => '/all'],
+    'new' => ['routePath' => '/create', 'routeName' => 'create'],
+    'edit' => ['routePath' => '/edit-{entityId}', 'routeName' => 'edit'],
+    'delete' => ['routePath' => '/remove/{entityId}'],
+    'detail' => ['routeName' => 'view'],
+])]
 class DashboardController extends AbstractDashboardController {
 
     public function __construct(

@@ -40,10 +40,10 @@ class BikeRequestController extends AbstractController {
     }
 
     #[Route('/bike-request-instructions/{id}', name: 'bike-request-instructions', requirements: ['id' => '\d+'])]
-    public function instructions(ConfigurationService $configurationService,BikeRequestRepository $bikeRequestRepository, int $id): Response {
+    public function instructions(ConfigurationService $configurationService, BikeRequestRepository $bikeRequestRepository, int $id): Response {
         $bikeRequest = $bikeRequestRepository
                 ->find($id);
-        if ($bikeRequest == null) {
+        if ($bikeRequest === null) {
             die();
         }
         $distribution = $configurationService->getYamlConfiguration('distribution');
