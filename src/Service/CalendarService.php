@@ -32,7 +32,7 @@ class CalendarService {
             $days[] = $d >= $firstDayOfWeek ? $dayOfMonth++ : null;
         }
         $weeks[] = $days;
-        while ($dayOfMonth < $daysInMonth) {
+        while ($dayOfMonth <= $daysInMonth) {
             $days = [];
             for ($d = self::$calendar->getMinimum(IntlCalendar::FIELD_DAY_OF_WEEK); $d <= self::$calendar->getMaximum(IntlCalendar::FIELD_DAY_OF_WEEK); $d++) {
                 $days[] = $dayOfMonth <= $daysInMonth ? $dayOfMonth++ : null;

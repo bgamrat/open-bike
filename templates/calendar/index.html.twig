@@ -24,42 +24,47 @@
 
     <div class="row row-cols-7">
         {% for day in day_names %}
-            <div class="col border bg-info opacity-75 text-white">
+            <div class="p-1 col border bg-info opacity-75 text-white">
                 <span class="d-none d-sm-block font-weight-bold text-uppercase text-center">{{ day | trans }}</span>
                 <span class="d-block d-sm-none font-weight-bold text-uppercase text-center">{{ day | trans | slice(0,1) }}</span>
             </div>
         {% endfor %}
     </div>
 
-    {% for week in calendar %}
-        <div class="row row-cols-7 ">
-            {%  for day in week %}
-                <div class="col border">
-                    <div class="fs-6">
-                        {{ day | trans }}
-                    </div>
-                    <ul class="list-unstyled">
-                        {% if bike_requests[day] is defined  %}
-                            {% for br in bike_requests[day] %}
-                                <li>{{ _self.bike_request_modal(br)}}</li>
+    <div id="calendar">
+        {% for week in calendar %}
+            <div class="day row row-cols-7">
+                {%  for day in week %}
+                    <div class="p-1 col border">
+                        <div class="text-end">
+                            {{ day | trans }}
+                        </div>
+                        <ul class="list-unstyled">
+                            {% if bike_requests[day] is defined  %}
+                                {% for br in bike_requests[day] %}
+                                    <li>{{ _self.bike_request_modal(br)}}</li>
                                 {% endfor %}
                             {% endif %}
+                            {% if bike_requests[day] is defined and events[day] is defined %}
+                            <hr class="d-none d-sm-block m-0 p-0">
+                            {%  endif %}
                             {% if events[day] is defined  %}
                                 {% for e in events[day] %}
-                                <li>{{ _self.event_modal(e)}}</li>
+                                    <li>{{ _self.event_modal(e,day)}}</li>
                                 {% endfor %}
                             {% endif %}
-                    </ul>
-                </div>
-            {% endfor %}
-        </div>
-    {%  endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+        {%  endfor %}
+    </div>
 
 {% endblock %}
 
 {% macro bike_request_modal(br) %}
-    <button type="button" class="btn btn-info btn-sm text-start" data-bs-toggle="modal" data-bs-target="#br{{ br.id }}">
-        {{ br.clientName }}
+    <button type="button" class="mx-0 my-1 p-1 btn btn-outline-primary btn-sm text-start" data-bs-toggle="modal" data-bs-target="#br{{ br.id }}">
+        <i class="bi bi-bicycle"></i><span class="d-none d-sm-block">{{ br.clientName }}</span>
     </button>
     <div class="modal" id="br{{ br.id }}" tabindex="-1" aria-labelledby="br{{ br.id }}Label" aria-hidden="true">
         <div class="modal-dialog">
@@ -101,12 +106,12 @@
     </div>
 {% endmacro %}
 
-{% macro event_modal(e) %}
-    <button type="button" class="btn btn-info btn-sm text-start" data-bs-toggle="modal" data-bs-target="#event{{ e.id }}">
-        {{ e.type.value | trans }} {{ e.name }} ({{ e.host }})
+{% macro event_modal(e,d) %}
+    <button type="button" class="mx-0 my-1 p-1 btn btn-outline-secondary btn-sm text-start" data-bs-toggle="modal" data-bs-target="#event{{ e.id }}">
+        <i class="{{ e.type.icon }}"></i><span class="d-none d-sm-block"> {{ e.name }}</span>
     </button>
     {# if an event spans more than one days, only create one modal and refer all the other days to the first one #}
-    {%  if not e.isMultiDay %}
+    {% if e.isFirstDay(d) %}
         <div class="modal" id="event{{ e.id }}" tabindex="-1" aria-labelledby="event{{ e.id }}Label" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">

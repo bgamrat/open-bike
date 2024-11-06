@@ -35,7 +35,6 @@ class BikeRequestController extends AbstractController {
             $entityManager->flush();
             return $this->redirectToRoute('bike-request-instructions', ['id' => $bikeRequest->getId()]);
         }
-
         return $this->render('bike_request/new.html.twig', ['bike_request_form' => $form]);
     }
 

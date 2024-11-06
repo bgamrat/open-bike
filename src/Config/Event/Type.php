@@ -11,12 +11,25 @@
 
 namespace App\Config\Event;
 
-enum Type: string
-{
+use Iconed;
+
+enum Type: string implements Iconed {
+
     case Cleanup = 'Cleanup';
     case Meeting = 'Meeting';
     case Other = 'Other';
     case Pickup = 'Pickup';
     case Sale = 'Sale';
     case Wrenching = 'Wrenching';
+
+    public function icon(): string {
+        return match ($this) {
+            Type::Cleanup => "bi bi-bucket",
+            Type::Meeting => "bi bi-clipboard",
+            Type::Other => "bi bi-motherboard",
+            Type::Pickup => "bi bi-truck",
+            Type::Sale => "bi bi-tags",
+            Type::Wrenching => "bi bi-tools"
+        };
+    }
 }

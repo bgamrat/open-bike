@@ -38,7 +38,7 @@ class BikeRequest
     private ?\DateTimeInterface $date = null;
 
     #[Assert\Regex(
-        pattern: '/^[\w ,.()&#@\'?-]{2,32}$/',
+        pattern: '/^[\w\' ,.()&@"?-]{2,32}$/',
         message: 'requester.height.message.invalid',
         normalizer: trim
     )]

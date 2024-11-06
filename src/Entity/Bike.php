@@ -89,6 +89,7 @@ class Bike {
 
     public function __construct() {
         $this->recipient = new ArrayCollection();
+	$this->updatedAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int {

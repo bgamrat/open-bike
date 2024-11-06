@@ -18,8 +18,7 @@ class EventService {
     }
 
     public function getEventMap(DateTime $month, DateTime $lastDayOfMonth) {
-
-        $events = $this->eventRepository->findByDateRange($month->getTimestamp(), $lastDayOfMonth);
+        $events = $this->eventRepository->findByDateRange($month->format('Y-m-d'), $lastDayOfMonth->format('Y-m-d'));
 
         $eventMap = [];
         foreach ($events as $e) {
@@ -35,7 +34,7 @@ class EventService {
 
     public function getBikeRequestMap(DateTime $month, DateTime $lastDayOfMonth) {
 
-        $bikeRequests = $this->bikeRequestRepository->findByDateRange($month->getTimestamp(), $lastDayOfMonth);
+        $bikeRequests = $this->bikeRequestRepository->findByDateRange($month->format('Y-m-d'), $lastDayOfMonth->format('Y-m-d'));
 
         $bikeRequestMap = [];
         foreach ($bikeRequests as $br) {

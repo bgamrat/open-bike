@@ -25,8 +25,8 @@ class CalendarController extends AbstractController {
             $year = date('Y');
             $month = date('n');
         }
-        $calendarMonth = new DateTime($year . '-' . $month . '-1'); // first day of month to be displayed
 
+        $calendarMonth = new DateTime($year . '-' . $month . '-1'); // first day of month to be displayed
         $lastMonth = strtotime('-1month', $calendarMonth->getTimestamp());
         $prevYear = date('Y', $lastMonth);
         $prevMonth = date('m', $lastMonth);

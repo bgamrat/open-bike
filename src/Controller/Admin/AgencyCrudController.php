@@ -29,8 +29,8 @@ class AgencyCrudController extends AbstractCrudController {
             IdField::new('id')->hideOnForm(),
             TextField::new('name'),
             TextField::new('pointOfContact'),
-            EmailField::Field::new('email'),
-            TelephoneField::Field::new('contactPhone')
+            EmailField::new('contactEmail'),
+            TelephoneField::new('contactPhone')
         ];
     }
 }

@@ -85,7 +85,11 @@ class Event {
     }
 
     public function isMultiDay(): bool {
-        return $this->start->diff($this->end)->days != 0;
+	return $this->start->diff($this->end)->days > 1;
+    }
+
+    public function isFirstDay($day): bool {
+        return $this->start->format('d') == $day;
     }
 
     public function getNote(): ?string {

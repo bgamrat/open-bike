@@ -1,3 +1,5 @@
+<?php
+
 /*
  * This file is part of open-bike.
  *
@@ -7,20 +9,7 @@
  * file that was distributed with this source code.
  */
 
-:root {
-    
-}
-
-#calendar,
-#calendar .btn.btn-sm {
-    font-size: .7rem;
-}
-
-.day {
-    min-height: 15cqw;
-}
-
-.required::before {
-    color:#800;
-    content:"* ";
+interface Iconed
+{
+    public function icon(): string;
 }
