@@ -1,5 +1,4 @@
-# config/routes/easyadmin.yaml
-# TODO: doesn't work - will figure it out later'
+# config/routes/easyadmin.yaml BUGGY
 #easyadmin:
 #    resource: .
 #    type: easyadmin.routes

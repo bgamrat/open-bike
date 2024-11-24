@@ -16,7 +16,6 @@ export default class extends Controller {
     }
 
     connect() {
-        console.log("connect");
         grecaptcha.ready(function () {
             grecaptcha.execute(this.siteKey, {
                 action: 'social'

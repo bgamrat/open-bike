@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -30,6 +31,7 @@ class VolunteerCrudController extends AbstractCrudController {
             IdField::new('id')->hideOnForm(),
             TextField::new('firstName'),
             TextField::new('lastName'),
+            IntegerField::new('tagId'),
             EmailField::new('email')->setHtmlAttributes(['placeholder' => 'superseded_by_user_account_email']),
             TelephoneField::new('phone'),
             AssociationField::new('user')

@@ -16,7 +16,7 @@ class Shift
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?DateTimeInterface $startTime = null;
+    private ?DateTimeInterface $startDateTime = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $endDateTime = null;
@@ -24,19 +24,22 @@ class Shift
     #[ORM\ManyToOne(inversedBy: 'shifts')]
     private ?Volunteer $Volunteer = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $adjusted = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStartTime(): ?DateTimeInterface
+    public function getStartDateTime(): ?DateTimeInterface
     {
-        return $this->startTime;
+        return $this->startDateTime;
     }
 
-    public function setStartTime(DateTimeInterface $startTime): static
+    public function setStartDateTime(DateTimeInterface $startDateTime): static
     {
-        $this->startTime = $startTime;
+        $this->startDateTime = $startDateTime;
 
         return $this;
     }
@@ -61,6 +64,18 @@ class Shift
     public function setVolunteer(?Volunteer $Volunteer): static
     {
         $this->Volunteer = $Volunteer;
+
+        return $this;
+    }
+
+    public function isAdjusted(): ?bool
+    {
+        return $this->adjusted;
+    }
+
+    public function setAdjusted(?bool $adjusted): static
+    {
+        $this->adjusted = $adjusted;
 
         return $this;
     }

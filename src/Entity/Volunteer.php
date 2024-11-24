@@ -42,6 +42,9 @@ class Volunteer {
     #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'host')]
     private Collection $events;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $tagId = null;
+
     public function __construct() {
         $this->shifts = new ArrayCollection();
         $this->events = new ArrayCollection();
@@ -163,5 +166,17 @@ class Volunteer {
 
     public function __toString() {
         return $this->firstName . ' ' . $this->lastName;
+    }
+
+    public function getTagId(): ?int
+    {
+        return $this->tagId;
+    }
+
+    public function setTagId(?int $tagId): static
+    {
+        $this->tagId = $tagId;
+
+        return $this;
     }
 }
