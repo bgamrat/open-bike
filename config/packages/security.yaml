@@ -23,6 +23,11 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+            pattern: ^/api/
+            access_token:
+                token_handler: App\Security\AccessTokenHandler
+            custom_authenticator: App\Security\AppAuthenticator
         main:
             lazy: true
             provider: app_user_provider
@@ -52,6 +57,7 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/settings, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api, roles: ROLE_API_USER }
 
 when@test:
     security:
