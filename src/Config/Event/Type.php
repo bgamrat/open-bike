@@ -11,7 +11,10 @@
 
 namespace App\Config\Event;
 
-use Iconed;
+interface Iconed
+{
+    public function icon(): string;
+}
 
 enum Type: string implements Iconed {
 
