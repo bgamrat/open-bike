@@ -28,4 +28,11 @@ return [
     'chart.js' => [
         'version' => '3.9.1',
     ],
+    'chartjs' => [
+        'version' => '0.3.24',
+    ],
+    'ux-chartjs' => [
+        'path' => './bootstrap.js',
+        'entrypoint' => true,
+    ],
 ];

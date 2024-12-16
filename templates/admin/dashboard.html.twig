@@ -9,7 +9,9 @@
  */
 #}
 {% extends '@EasyAdmin/layout.html.twig' %}
-
+{% block javascripts %}
+    {% block importmap %}{{ importmap('ux-chartjs') }}{% endblock %}
+{% endblock %}
 {% block main %}
     <article>
         <h1>{{ 'Dashboard' | trans }}</h1>
@@ -22,8 +24,11 @@
             </div>
             <div class="col">
                 <section id="bike_requests">
-                    <h2>{{ 'Bike Requests' | trans }}</h2>
-                    {#{ render_chart(bike_request_chart) }#}
+                    <h2>{{ 'Status' | trans }}</h2>
+                    <dl>
+                        <dt>{{ 'Pending bike requests' | trans }}</dt><dd>{{ bike_requests }}</dd>
+                        <dt>{{ 'Volunteers' | trans }}</dt><dd>{{ volunteers }}</dd>
+                    </dl>
                 </section>
             </div>
         </div>

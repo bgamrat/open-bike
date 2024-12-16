@@ -97,7 +97,7 @@
                     </dl>
                     {% if is_granted('ROLE_ADMIN') %}
                         <p>
-                            <a href="/admin?crudAction=edit&crudControllerFqcn=App%5CController%5CAdmin%5CBikeRequestCrudController&entityId={{ br.id }}">{{ 'Edit' | trans }}</a>
+                            <a href="/admin/bike-request/{{ br.id }}/edit">{{ 'Edit' | trans }}</a>
                         </p>
                     {% endif %}
                 </div>
@@ -124,8 +124,8 @@
                         <p>{{ e.note }}</p>
                         {% if is_granted('ROLE_ADMIN') %}
                             <p>
-                                <a href="/admin?crudAction=edit&crudControllerFqcn=App%5CController%5CAdmin%5CEventCrudController&entityId={{ e.id }}">{{ 'Edit' | trans }}</a>
-                            </p>
+                                <a href="/admin/event/{{ e.id }}/edit">{{ 'Edit' | trans }}</a>
+                            </p>/edit
                         {% endif %}
                     </div>
                 </div>
