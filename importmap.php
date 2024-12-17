@@ -31,8 +31,10 @@ return [
     'chartjs' => [
         'version' => '0.3.24',
     ],
-    'ux-chartjs' => [
-        'path' => './bootstrap.js',
-        'entrypoint' => true,
+    'chartjs-plugin-autocolors' => [
+        'version' => '0.3.1',
+    ],
+    '@kurkle/color' => [
+        'version' => '0.3.2',
     ],
 ];

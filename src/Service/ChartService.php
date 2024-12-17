@@ -17,7 +17,7 @@ class ChartService {
     public function __construct(
             private ChartBuilderInterface $chartBuilder,
             private BikeRepository $bikeRepository) {
-
+        
     }
 
     public function makeBikeChart() {
@@ -43,7 +43,7 @@ class ChartService {
                     'suggestedMin' => 0,
                     'suggestedMax' => max($data) * 1.1,
                 ],
-            ],
+            ]
         ]);
         return $bikeChart;
     }

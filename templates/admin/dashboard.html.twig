@@ -10,7 +10,7 @@
 #}
 {% extends '@EasyAdmin/layout.html.twig' %}
 {% block javascripts %}
-    {% block importmap %}{{ importmap('ux-chartjs') }}{% endblock %}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
 {% endblock %}
 {% block main %}
     <article>
@@ -19,7 +19,7 @@
             <div class="col">
                 <section id="bikes">
                     <h2>{{ 'Bikes' | trans }}</h2>
-                    {{ render_chart(bike_chart) }}
+                    {{ render_chart(bike_chart,{'data-controller':'chartjs'}) }}
                 </section>
             </div>
             <div class="col">
