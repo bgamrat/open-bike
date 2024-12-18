@@ -62,11 +62,10 @@ class ChartService {
         foreach ($datasets as $k => $ds) {
             $datasets[$k]['label'] = $k;
         }
-
         $data = $this->bikeRequestRepository->countByStatusGroupByYearMonth();
         $firstDate = new \DateTime($data[0]['yearmonth']);
         $lastDate = new \DateTime($data[count($data)-1]['yearmonth']);
-        $datePeriod = new \DatePeriod($firstDate,new \DateInterval('P1M'),$lastDate);
+        $datePeriod = new \DatePeriod($firstDate,new \DateInterval('P1M'),$lastDate->add(new \DateInterval('P1D')));
         foreach ($datePeriod as $date) {
             $dateString = $date->format('Y-M');
             $labels[] = $dateString;
@@ -82,7 +81,6 @@ class ChartService {
             $arr[] = ['label' => $s, 'data' => array_values($ds['assoc-data'])];
             unset($datasets[$s]);
         }
-        //dd($datasets);
         $chart->setData([
             'labels' => $labels,
             'datasets' => $arr
