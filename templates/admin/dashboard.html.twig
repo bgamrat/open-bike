@@ -17,18 +17,26 @@
         <h1>{{ 'Dashboard' | trans }}</h1>
         <div class="row">
             <div class="col">
-                <section id="bikes">
-                    <h2>{{ 'Bikes' | trans }}</h2>
-                    {{ render_chart(bike_chart,{'data-controller':'chartjs'}) }}
-                </section>
-            </div>
-            <div class="col">
-                <section id="bike_requests">
+                <section id="bike-requests">
                     <h2>{{ 'Status' | trans }}</h2>
                     <dl>
                         <dt>{{ 'Pending bike requests' | trans }}</dt><dd>{{ bike_requests }}</dd>
                         <dt>{{ 'Volunteers' | trans }}</dt><dd>{{ volunteers }}</dd>
                     </dl>
+                </section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <section id="bikes">
+                    <h2>{{ 'Bikes' | trans }}</h2>
+                    {{ render_chart(bike_status_chart,{'data-controller':'chartjs'}) }}
+                </section>
+            </div>
+            <div class="col">
+                <section id="client-bikes">
+                    <h2>{{ 'Bike requests' | trans }}</h2>
+                    {{ render_chart(bike_request_chart,{'data-controller':'chartjs'}) }}
                 </section>
             </div>
         </div>

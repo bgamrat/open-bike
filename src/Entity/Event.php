@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Config\Event\Type;
 use App\Repository\EventRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -39,6 +41,16 @@ class Event {
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Volunteer $host = null;
+
+    /**
+     * @var Collection<int, Recurrence>
+     */
+    #[ORM\OneToMany(targetEntity: Recurrence::class, mappedBy: 'event', orphanRemoval: true, cascade: ["persist"])]
+    private Collection $recurrences;
+
+    public function __construct() {
+        $this->recurrences = new ArrayCollection();
+    }
 
     public function getId(): ?int {
         return $this->id;
@@ -85,7 +97,7 @@ class Event {
     }
 
     public function isMultiDay(): bool {
-	return $this->start->diff($this->end)->days > 1;
+        return $this->start->diff($this->end)->days > 1;
     }
 
     public function isFirstDay($day): bool {
@@ -114,5 +126,32 @@ class Event {
 
     public function __toString() {
         return \sprintf('%s %s (%s)', $this->type->value, $this->name, $this->host);
+    }
+
+    /**
+     * @return Collection<int, Recurrence>
+     */
+    public function getRecurrences(): Collection {
+        return $this->recurrences;
+    }
+
+    public function addRecurrence(Recurrence $recurrence): static {
+        if (!$this->recurrences->contains($recurrence)) {
+            $this->recurrences->add($recurrence);
+            $recurrence->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecurrence(Recurrence $recurrence): static {
+        if ($this->recurrences->removeElement($recurrence)) {
+            // set the owning side to null (unless already changed)
+            if ($recurrence->getEvent() === $this) {
+                $recurrence->setEvent(null);
+            }
+        }
+
+        return $this;
     }
 }

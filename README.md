@@ -19,4 +19,5 @@ Defining bikes, establishing application architecture
 To create an admin user use `bin/console app:add-admin email@example.com password`
 
 # Caution
-The database migration stuff is all messed up. I'll fix it later. Sorry
+The database migration stuff is all messed up. I'll fix it later. Sorry. Likely related to the use of [MariaDB](https://symfony.com/bundles/DoctrineMigrationsBundle/current/index.html#troubleshooting-out-of-sync-metadata-storage-issue)
+The steps described in the documentation worked.

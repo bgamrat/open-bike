@@ -34,15 +34,19 @@ class DashboardController extends AbstractDashboardController {
             private BikeRequestRepository $bikeRequestRepository,
             private VolunteerRepository $volunteerRespository
     ) {
-
     }
 
     #[Route('/admin', name: 'admin')]
     public function index(): Response {
-        $bikeChart = $this->chartService->makeBikeChart();
+        $bikeStatusChart = $this->chartService->makeBikeStatusChart();
+        $bikeRequestChart = $this->chartService->makeBikeRequestChart();
         $bikeRequests = $this->bikeRequestRepository->countByStatus([BikeRequestStatus::Pending]);
         $volunteers = $this->volunteerRespository->count();
-        return $this->render('admin/dashboard.html.twig', ['bike_chart' => $bikeChart, 'bike_requests' => $bikeRequests, 'volunteers' => $volunteers]);
+        return $this->render('admin/dashboard.html.twig', [
+            'bike_status_chart' => $bikeStatusChart,
+            'bike_requests' => $bikeRequests,
+            'bike_request_chart' => $bikeRequestChart,
+            'volunteers' => $volunteers]);
     }
 
     public function configureDashboard(): Dashboard {
@@ -51,7 +55,7 @@ class DashboardController extends AbstractDashboardController {
     }
 
     public function configureMenuItems(): iterable {
-        yield MenuItem::linkToRoute('Home', 'fas fa-home', 'home');
+        yield MenuItem::linkToUrl('Home', 'fas fa-home', '/');
         yield MenuItem::linkToDashboard('Dashboard', 'fas fa-gauge');
         yield MenuItem::linkToCrud('Bikes', 'fas fa-bicycle', Bike::class);
         yield MenuItem::linkToCrud('Volunteers', 'fas fa-person', Volunteer::class);

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\BikeRequest;
+use App\Config\BikeRequest\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -27,6 +28,17 @@ class BikeRequestRepository extends ServiceEntityRepository {
                         ->getQuery()
                         ->getResult()
         ;
+    }
+
+    public function countByStatusGroupByYearMonth(): array {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = '
+SELECT DATE_FORMAT(br.date,"%Y-%b") yearmonth, br.status, COUNT(br.status) cnt FROM bike_request br
+GROUP BY YEAR(br.date),MONTH(br.date)
+ORDER BY br.date ASC';
+        $resultSet = $conn->executeQuery($sql);
+        return $resultSet->fetchAllAssociative();
+
     }
 
     //    public function findOneBySomeField($value): ?Appointment

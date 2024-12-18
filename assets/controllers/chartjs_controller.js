@@ -2,6 +2,7 @@ import { Controller } from '@hotwired/stimulus';
 import { Chart } from 'chart.js';
 import autocolors from 'chartjs-plugin-autocolors';
 Chart.register(autocolors);
+
 export default class chartJSController extends Controller {
 
     connect() {
@@ -13,13 +14,14 @@ export default class chartJSController extends Controller {
         this.element.removeEventListener('chartjs:pre-connect', this._onPreConnect);
     }
     _onPreConnect(event) {
-        event.detail.config.options = {...event.detail.config.options, 
+        /*
+        event.detail.config.options = {...event.detail.config.options,
             plugins: {
                 autocolors: {
                     mode: 'data'
                 }
             }
-        }
+        }*/
 
     }
 };
