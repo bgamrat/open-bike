@@ -38,9 +38,10 @@ class CalendarController extends AbstractController {
         $lastDayOfMonth = $calendarService->getLastDayOfMonth($calendarMonth);
         $bikeRequestMap = $eventService->getBikeRequestMap($calendarMonth, $lastDayOfMonth);
         $eventMap = $eventService->getEventMap($calendarMonth, $lastDayOfMonth);
-
+//dd($eventMap);
         return $this->render('calendar/index.html.twig', array(
                     'calendar_month' => $calendarMonth,
+                    'month' => $month,
                     'prev_year' => $prevYear,
                     'prev_month' => $prevMonth,
                     'next_year' => $nextYear,

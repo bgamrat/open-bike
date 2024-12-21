@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Repository\BikeRequestRepository;
 use App\Repository\EventRepository;
+use App\Repository\RecurrenceRepository;
 use DateTime;
 
 /**
@@ -13,13 +14,15 @@ use DateTime;
  */
 class EventService {
 
-    public function __construct(private BikeRequestRepository $bikeRequestRepository, private EventRepository $eventRepository) {
-
+    public function __construct(private EventRepository $eventRepository,
+            private RecurrenceRepository $recurrenceRepository,
+            private BikeRequestRepository $bikeRequestRepository) {
+        
     }
 
     public function getEventMap(DateTime $month, DateTime $lastDayOfMonth) {
-        $events = $this->eventRepository->findByDateRange($month->format('Y-m-d'), $lastDayOfMonth->format('Y-m-d'));
 
+        $events = $this->eventRepository->findByDateRange($month, $lastDayOfMonth);
         $eventMap = [];
         foreach ($events as $e) {
             $startDay = $e->getStart()->format('j');
@@ -28,9 +31,14 @@ class EventService {
                 $eventMap[$day][] = $e;
             }
         }
+
+        $recurrences = $this->recurrenceRepository->findByDateRange($month, $lastDayOfMonth);
+        foreach ($recurrences as $r) {
+            $day = $r->getDateTime()->format('j');
+            $eventMap[$day][] = $r->getEvent();
+        }
         return $eventMap;
     }
-
 
     public function getBikeRequestMap(DateTime $month, DateTime $lastDayOfMonth) {
 

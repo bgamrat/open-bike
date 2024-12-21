@@ -50,7 +50,7 @@
                             {%  endif %}
                             {% if events[day] is defined  %}
                                 {% for e in events[day] %}
-                                    <li>{{ _self.event_modal(e,day)}}</li>
+                                    <li>{{ _self.event_modal(e,month,day)}}</li>
                                 {% endfor %}
                             {% endif %}
                         </ul>
@@ -106,12 +106,12 @@
     </div>
 {% endmacro %}
 
-{% macro event_modal(e,d) %}
+{% macro event_modal(e,m,d) %}
     <button type="button" class="mx-0 my-1 p-1 btn btn-outline-secondary btn-sm text-start" data-bs-toggle="modal" data-bs-target="#event{{ e.id }}">
         <i class="{{ e.type.icon }}"></i><span class="d-none d-sm-block"> {{ e.name }}</span>
     </button>
     {# if an event spans more than one days, only create one modal and refer all the other days to the first one #}
-    {% if e.isFirstDay(d) %}
+    {% if e.isFirstDay(m,d) or e.isFirstRecurrence(m,d) %}
         <div class="modal" id="event{{ e.id }}" tabindex="-1" aria-labelledby="event{{ e.id }}Label" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -120,12 +120,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>{{ e.start | date('m/d')}}{%  if e.isMultiDay %} - {{ e.end | date('m/d') }}{% endif %}</p>
+                        <!-- p>{{ e.start | date('m/d')}}{%  if e.isMultiDay %} - {{ e.end | date('m/d') }}{% endif %}</p -->
                         <p>{{ e.note }}</p>
                         {% if is_granted('ROLE_ADMIN') %}
                             <p>
                                 <a href="/admin/event/{{ e.id }}/edit">{{ 'Edit' | trans }}</a>
-                            </p>/edit
+                            </p>
                         {% endif %}
                     </div>
                 </div>

@@ -16,20 +16,19 @@ class RecurrenceRepository extends ServiceEntityRepository
         parent::__construct($registry, Recurrence::class);
     }
 
-    //    /**
-    //     * @return Recurrence[] Returns an array of Recurrence objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Recurrence[] Returns an array of Recurrence objects
+     */
+    public function findByDateRange($start,$end): array {
+        return $this->createQueryBuilder('r')
+                        ->where('r.datetime BETWEEN :start AND :end')
+                        ->setParameter('start', $start)
+                        ->setParameter('end', $end)
+                        ->orderBy('r.datetime', 'ASC')
+                        ->getQuery()
+                        ->getResult()
+        ;
+    }
 
     //    public function findOneBySomeField($value): ?Recurrence
     //    {
