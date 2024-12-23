@@ -39,10 +39,10 @@ class EventCrudController extends AbstractCrudController {
             DateTimeField::new('start'),
             DateTimeField::new('end'),
             TextareaField::new('note'),
-            AssociationField::new('host')->setQueryBuilder(
-                           fn(QueryBuilder $queryBuilder) => $queryBuilder->getEntityManager()->getRepository(Volunteer::class)->findAll())
-                  ->autocomplete(),
-            CollectionField::new('recurrences')->useEntryCrudForm()->allowAdd(true)->allowDelete(true)->setEntryIsComplex()
+                    AssociationField::new('host')->setQueryBuilder(
+                            fn(QueryBuilder $queryBuilder) => $queryBuilder->getEntityManager()->getRepository(Volunteer::class)->findAll())
+                    ->autocomplete(),
+            CollectionField::new('recurrences')->onlyOnForms()->useEntryCrudForm()->allowAdd(true)->allowDelete(true)
         ];
     }
 

@@ -46,6 +46,7 @@ class Event {
      * @var Collection<int, Recurrence>
      */
     #[ORM\OneToMany(targetEntity: Recurrence::class, mappedBy: 'event', orphanRemoval: true, cascade: ["persist"])]
+    #[ORM\OrderBy(["datetime" => "DESC"])] // more recent events have precedence
     private Collection $recurrences;
 
     public function __construct() {
@@ -100,15 +101,18 @@ class Event {
         return $this->start->diff($this->end)->days > 1;
     }
 
-    public function isFirstDay($month,$day): bool {
-        return $this->start->format('m-d') == $month.'-'.$day;
+    public function isFirstDay($month, $day): bool {
+        return $this->start->format('m-d') == $month . '-' . $day;
     }
-    
-    public function isFirstRecurrence($month,$day) : bool {
+
+    public function isFirstRecurrence($month, $day): bool {
+        if ($this->recurrences->isEmpty()) {
+            return false;
+        }
         $first = $this->recurrences->first();
-        return $first->getDateTime()->format('m-d') === $month.'-'.$day;
+        return $first->getDateTime()->format('m-d') === $month . '-' . $day;
     }
-    
+
     public function getNote(): ?string {
         return $this->note;
     }

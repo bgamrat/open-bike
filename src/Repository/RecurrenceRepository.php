@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of open-bike.
+ *
+ * (c) Betsy Gamrat <betsy.gamrat@wirehopper.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Repository;
 
 use App\Entity\Recurrence;
@@ -24,19 +33,18 @@ class RecurrenceRepository extends ServiceEntityRepository
                         ->where('r.datetime BETWEEN :start AND :end')
                         ->setParameter('start', $start)
                         ->setParameter('end', $end)
-                        ->orderBy('r.datetime', 'ASC')
+                        ->orderBy('r.datetime', 'DESC') // based on the assumption later recurrences are more important
                         ->getQuery()
                         ->getResult()
         ;
     }
 
-    //    public function findOneBySomeField($value): ?Recurrence
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findByDate($date): ?array {
+        return $this->createQueryBuilder('r')
+                        ->where(':date = r.datetime')
+                        ->setParameter('date', $date)
+                        ->getQuery()
+                        ->getResult()
+        ;
+    }
 }

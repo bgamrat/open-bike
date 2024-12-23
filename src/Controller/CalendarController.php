@@ -25,7 +25,7 @@ class CalendarController extends AbstractController {
             $month = date('n');
         }
 
-        $calendarMonth = new DateTime($year . '-' . $month . '-1'); // first day of month to be displayed
+        $calendarMonth = new \DateTime($year . '-' . $month . '-1'); // first day of month to be displayed
         $lastMonth = strtotime('-1month', $calendarMonth->getTimestamp());
         $prevYear = date('Y', $lastMonth);
         $prevMonth = date('m', $lastMonth);
@@ -38,7 +38,7 @@ class CalendarController extends AbstractController {
         $lastDayOfMonth = $calendarService->getLastDayOfMonth($calendarMonth);
         $bikeRequestMap = $eventService->getBikeRequestMap($calendarMonth, $lastDayOfMonth);
         $eventMap = $eventService->getEventMap($calendarMonth, $lastDayOfMonth);
-//dd($eventMap);
+
         return $this->render('calendar/index.html.twig', array(
                     'calendar_month' => $calendarMonth,
                     'month' => $month,
@@ -50,6 +50,29 @@ class CalendarController extends AbstractController {
                     'calendar' => $calendar,
                     'bike_requests' => $bikeRequestMap,
                     'events' => $eventMap
+        ));
+    }
+    
+    #[Route('/calendar/print/{year}/{month}/{day}', name: 'calendar-print-day', requirements: ['year' => '\d{4}', 'month' => '\d\d?', 'day'=>'\d\d?'])]
+    public function printMonthAction(CalendarService $calendarService, EventService $eventService, Request $request, 
+            int $year = null, int $month = null, int $day = null) {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
+        if ($year === null || $month === null || $day === null) {
+            $year = date('Y');
+            $month = date('n');
+            $day = '1';
+        }
+
+        $day = new \DateTime($year . '-' . $month . '-'. $day);
+
+        $bikeRequests = $eventService->getBikeRequests($day);
+        $events = $eventService->getEvents($day);
+
+        return $this->render('calendar/print/day.html.twig', array(
+                    'day' => $day,
+                    'bike_requests' => $bikeRequests,
+                    'events' => $events
         ));
     }
 }

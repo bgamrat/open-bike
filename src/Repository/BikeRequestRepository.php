@@ -19,7 +19,7 @@ class BikeRequestRepository extends ServiceEntityRepository {
     /**
      * @return BikeRequest[] Returns an array of BikeRequest objects
      */
-    public function findByDateRange($start, $end): array {
+    public function findByDateRange($start, $end): ?array {
         return $this->createQueryBuilder('br')
                         ->where('br.date BETWEEN :start AND :end')
                         ->setParameter('start', $start)
@@ -30,7 +30,7 @@ class BikeRequestRepository extends ServiceEntityRepository {
         ;
     }
 
-    public function countByStatusGroupByYearMonth(): array {
+    public function countByStatusGroupByYearMonth(): ?array {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
 SELECT DATE_FORMAT(br.date,"%Y-%b") yearmonth, br.status, COUNT(br.status) cnt FROM bike_request br
@@ -41,13 +41,13 @@ ORDER BY br.date ASC';
 
     }
 
-    //    public function findOneBySomeField($value): ?Appointment
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+
+    public function findByDate($date): ?array {
+        return $this->createQueryBuilder('br')
+                        ->andWhere('br.date = :date')
+                        ->setParameter('date', $date)
+                        ->getQuery()
+                        ->getResult()
+        ;
+    }
 }

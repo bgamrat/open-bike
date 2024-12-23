@@ -17,10 +17,10 @@ class EventService {
     public function __construct(private EventRepository $eventRepository,
             private RecurrenceRepository $recurrenceRepository,
             private BikeRequestRepository $bikeRequestRepository) {
-        
+
     }
 
-    public function getEventMap(DateTime $month, DateTime $lastDayOfMonth) {
+    public function getEventMap(\DateTime $month, \DateTime $lastDayOfMonth) {
 
         $events = $this->eventRepository->findByDateRange($month, $lastDayOfMonth);
         $eventMap = [];
@@ -40,9 +40,9 @@ class EventService {
         return $eventMap;
     }
 
-    public function getBikeRequestMap(DateTime $month, DateTime $lastDayOfMonth) {
+    public function getBikeRequestMap(\DateTime $month, \DateTime $lastDayOfMonth) {
 
-        $bikeRequests = $this->bikeRequestRepository->findByDateRange($month->format('Y-m-d'), $lastDayOfMonth->format('Y-m-d'));
+        $bikeRequests = $this->bikeRequestRepository->findByDateRange($month, $lastDayOfMonth);
 
         $bikeRequestMap = [];
         foreach ($bikeRequests as $br) {
@@ -51,5 +51,21 @@ class EventService {
         }
 
         return $bikeRequestMap;
+    }
+
+    public function getEvents(\DateTime $day) {
+        $events = $this->eventRepository->findByDate($day);
+
+        $recurrences = $this->recurrenceRepository->findByDate($day);
+        foreach ($recurrences as $r) {
+            $events[] = $r->getEvent();
+        }
+        return $events;
+    }
+
+    public function getBikeRequests(\DateTime $day) {
+        $bikeRequests = $this->bikeRequestRepository->findByDate($day);
+
+        return $bikeRequests;
     }
 }

@@ -4,10 +4,17 @@
 
 {% block body %}
 
-    <h1 class="border-bottom">{{ 'Calendar' | trans}}</h1>
+    <div class="row border-bottom">
+        <div class="col">
+            <h1>{{ 'Calendar' | trans}}</h1>
+        </div>
+        <div class="d-none d-sm-block col text-end">
+            <a href="{{ path('calendar-print-day') }}" title="{{ 'Print' | trans }}"><i class="bi bi-printer fs-2 fw-bold"></i></a>
+        </div>
+    </div>
 
-    <div class="row">
-        <div class="col-sm-12 justify-self-right"><small>{{ date() | date('m/d/Y') }}</small></div>
+    <div class="d-none d-sm-block row">
+        <div class="col text-end"><small>{{ date() | date('m/d/Y') }}</small></div>
     </div>
 
     <div class="row">
@@ -34,7 +41,7 @@
     <div id="calendar">
         {% for week in calendar %}
             <div class="day row row-cols-7">
-                {%  for day in week %}
+                {% for day in week %}
                     <div class="p-1 col border">
                         <div class="text-end">
                             {{ day | trans }}
@@ -43,16 +50,16 @@
                             {% if bike_requests[day] is defined  %}
                                 {% for br in bike_requests[day] %}
                                     <li>{{ _self.bike_request_modal(br)}}</li>
-                                {% endfor %}
-                            {% endif %}
-                            {% if bike_requests[day] is defined and events[day] is defined %}
-                            <hr class="d-none d-sm-block m-0 p-0">
+                                    {% endfor %}
+                                {% endif %}
+                                {% if bike_requests[day] is defined and events[day] is defined %}
+                                <hr class="d-none d-sm-block m-0 p-0 border border-dark">
                             {%  endif %}
                             {% if events[day] is defined  %}
                                 {% for e in events[day] %}
                                     <li>{{ _self.event_modal(e,month,day)}}</li>
-                                {% endfor %}
-                            {% endif %}
+                                    {% endfor %}
+                                {% endif %}
                         </ul>
                     </div>
                 {% endfor %}
@@ -63,8 +70,8 @@
 {% endblock %}
 
 {% macro bike_request_modal(br) %}
-    <button type="button" class="mx-0 my-1 p-1 btn btn-outline-primary btn-sm text-start" data-bs-toggle="modal" data-bs-target="#br{{ br.id }}">
-        <i class="bi bi-bicycle"></i><span class="d-none d-sm-block">{{ br.clientName }}</span>
+    <button type="button" class="mx-0 p-1 btn btn-sm text-start" data-bs-toggle="modal" data-bs-target="#br{{ br.id }}">
+        <i class="bi bi-bicycle"></i><span class="d-none d-sm-inline ps-2">{{ br.clientName }}</span>
     </button>
     <div class="modal" id="br{{ br.id }}" tabindex="-1" aria-labelledby="br{{ br.id }}Label" aria-hidden="true">
         <div class="modal-dialog">
@@ -107,8 +114,8 @@
 {% endmacro %}
 
 {% macro event_modal(e,m,d) %}
-    <button type="button" class="mx-0 my-1 p-1 btn btn-outline-secondary btn-sm text-start" data-bs-toggle="modal" data-bs-target="#event{{ e.id }}">
-        <i class="{{ e.type.icon }}"></i><span class="d-none d-sm-block"> {{ e.name }}</span>
+    <button type="button" class="mx-0 p-1 btn btn-sm text-start {{ e.type.color }}" data-bs-toggle="modal" data-bs-target="#event{{ e.id }}">
+        <i class="{{ e.type.icon }}"></i><span class="d-none d-sm-inline ps-2">{{ e.name }}</span>
     </button>
     {# if an event spans more than one days, only create one modal and refer all the other days to the first one #}
     {% if e.isFirstDay(m,d) or e.isFirstRecurrence(m,d) %}
@@ -120,7 +127,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- p>{{ e.start | date('m/d')}}{%  if e.isMultiDay %} - {{ e.end | date('m/d') }}{% endif %}</p -->
+                        <p>{{ e.start | date('m/d')}}{%  if e.isMultiDay %} - {{ e.end | date('m/d') }}{% endif %}</p>
                         <p>{{ e.note }}</p>
                         {% if is_granted('ROLE_ADMIN') %}
                             <p>

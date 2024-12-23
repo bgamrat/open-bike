@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of open-bike.
+ *
+ * (c) Betsy Gamrat <betsy.gamrat@wirehopper.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Repository;
 
 use App\Entity\Event;
@@ -18,25 +27,24 @@ class EventRepository extends ServiceEntityRepository {
     /**
      * @return Event[] Returns an array of Event objects
      */
-    public function findByDateRange($start,$end): array {
+    public function findByDateRange($start, $end): ?array {
         return $this->createQueryBuilder('e')
                         ->where('e.start BETWEEN :start AND :end')
                         ->orWhere('e.end BETWEEN :start AND :end')
                         ->setParameter('start', $start)
                         ->setParameter('end', $end)
-                        ->orderBy('e.start', 'ASC')
+                        ->orderBy('e.start', 'DESC')
                         ->getQuery()
                         ->getResult()
         ;
     }
 
-    //    public function findOneBySomeField($value): ?Event
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findByDate($date): ?array {
+        return $this->createQueryBuilder('e')
+                        ->andWhere(':date BETWEEN e.start AND e.end')
+                        ->setParameter('date', $date)
+                        ->getQuery()
+                        ->getResult()
+        ;
+    }
 }

@@ -11,15 +11,6 @@
     
 }
 
-#calendar,
-#calendar .btn.btn-sm {
-    font-size: .7rem;
-}
-
-.day {
-    min-height: 10cqw;
-}
-
 .required::before {
     color:#800;
     content:"* ";
