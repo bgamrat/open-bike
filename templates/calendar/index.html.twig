@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'common.calendar'|trans }}{% endblock %}
+{% block title %}{{ 'Calendar'|trans }}{% endblock %}
 
 {% block body %}
 
@@ -43,9 +43,16 @@
             <div class="day row row-cols-7">
                 {% for day in week %}
                     <div class="p-1 col border">
-                        <div class="text-end">
-                            {{ day | trans }}
-                        </div>
+                        {% if day %}
+                            <div class="d-flex justify-content-between">
+                                <span>
+                                    {{ day | trans }}
+                                </span>
+                                {% if bike_requests[day] is defined or events[day] is defined %}
+                                    <a href="{{ path('calendar-print-day',{ 'year': year, 'month': month, 'day': day}) }}" target="_blank" title="{{ 'Print' | trans }}"><i class="bi bi-printer fw-bold"></i></a>
+                                    {% endif %}
+                            </div>
+                        {% endif %}
                         <ul class="list-unstyled">
                             {% if bike_requests[day] is defined  %}
                                 {% for br in bike_requests[day] %}

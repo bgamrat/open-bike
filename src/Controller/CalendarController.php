@@ -41,6 +41,7 @@ class CalendarController extends AbstractController {
 
         return $this->render('calendar/index.html.twig', array(
                     'calendar_month' => $calendarMonth,
+                    'year' => $year,
                     'month' => $month,
                     'prev_year' => $prevYear,
                     'prev_month' => $prevMonth,
@@ -52,9 +53,9 @@ class CalendarController extends AbstractController {
                     'events' => $eventMap
         ));
     }
-    
-    #[Route('/calendar/print/{year}/{month}/{day}', name: 'calendar-print-day', requirements: ['year' => '\d{4}', 'month' => '\d\d?', 'day'=>'\d\d?'])]
-    public function printMonthAction(CalendarService $calendarService, EventService $eventService, Request $request, 
+
+    #[Route('/calendar/print/{year}/{month}/{day}', name: 'calendar-print-day', requirements: ['year' => '\d{4}', 'month' => '\d\d?', 'day' => '\d\d?'])]
+    public function printMonthAction(CalendarService $calendarService, EventService $eventService, Request $request,
             int $year = null, int $month = null, int $day = null) {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
 
@@ -64,15 +65,15 @@ class CalendarController extends AbstractController {
             $day = '1';
         }
 
-        $day = new \DateTime($year . '-' . $month . '-'. $day);
+        $day = new \DateTime($year . '-' . $month . '-' . $day);
 
         $bikeRequests = $eventService->getBikeRequests($day);
         $events = $eventService->getEvents($day);
 
-        return $this->render('calendar/print/day.html.twig', array(
+        return $this->render('calendar/print/day.html.twig', [
                     'day' => $day,
                     'bike_requests' => $bikeRequests,
                     'events' => $events
-        ));
+        ]);
     }
 }

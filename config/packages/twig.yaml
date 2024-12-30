@@ -4,7 +4,8 @@ twig:
     globals:
         org_logo: '%env(ORG_LOGO)%'
         recaptcha3_site_key: '%karser_recaptcha3.site_key%'
-        bike_inventory: '@App\Service\BikeInventory'
+        bike_inventory: '@App\Service\BikeInventoryService'
+        pages: '@App\Service\PageService'
 
 when@test:
     twig:

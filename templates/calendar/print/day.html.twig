@@ -14,43 +14,64 @@
 
 {% block body %}
     <article>
-        <h1>{{ 'organization_name'| trans }} - {{ day | date('M d') }}</h1>
-        <dl>
-            {% for br in bike_requests %}
-                <dt>{{ br.clientName }}</dt>
-                <dd>
-                    <dl>
-                        <div>
-                            <dt>{{ 'Height' | trans }}</dt>
-                            <dd>{{ br.height }}</dd>
+        <h1 class="border-bottom">{{ 'organization_name'| trans }} - {{ day | date('M d') }}</h1> 
+        {%  if bike_requests | length > 0 %}
+            <section class="mx-0 my-2 border rounded" id="requests">
+                <h2 class="border-bottom">{{ 'Bike Requests' | trans }}</h2>
+                {% for br in bike_requests %}
+                    <div class="row p-2">
+                        <div class="col">
+                            <h2>{{ br.clientName }}</h2>
+                            <div>
+                                <span class="fw-bold">{{ 'Request status' | trans }}</span>
+                                {{ br.status.value }}
+                            </div>
                         </div>
-                        <div>
-                            <dt>{{ 'Contact' | trans }}</dt>
-                            <dd>{{ br.contact }}</dd>
+                        <div class="col">
+                            <h3>{{ 'Notes' | trans }}</h3>
+                            <p class="text-secondary"><small>{{ 'Serial number of bike, etc' | trans }}</small></p>
                         </div>
-                        <div>
-                            <dt>{{ 'Request status' | trans }}</dt>
-                            <dd class="bike-request-{{ br.status.value }}">{{ br.status.value }}</dd>
+                        <div class="col">
+                            <div>
+                                <span class="fw-bold">{{ 'Height' | trans }}</span>
+                                {{ br.height }}
+                            </div>
+                            <div>
+                                <span class="fw-bold">{{ 'Contact' | trans }}</span>
+                                {{ br.contact }}
+                            </div>
+                            <div>
+                                <span class="fw-bold">{{ 'Referred by' | trans }}</span>
+                                <address>
+                                    {{ br.referrer.name }}<br>
+                                    {{ br.referrer.pointOfContact }}<br>
+                                    {{ br.referrer.contactPhone }}<br>
+                                    {{ br.referrer.contactEmail }}
+                                </address>
+                            </div>
                         </div>
-                        <div>
-                            <dt>{{ 'Referred by' | trans }}</dt>
-                            <dd>{{ br.referrer.name }} {{ br.referrer.pointOfContact }}<br>
-                                {{ br.referrer.contactPhone }}<br>
-                                {{ br.referrer.contactEmail }}
-                            </dd>
-                        </div>
-                    </dl>
-                </dd>
-            {% endfor %}
-        </dl>
-        <dl>
-            {% for e in events %}
-                <dt>{{ e.type.value | trans }} {{ e.name }} ({{ e.host }})</dt>
-                <dd>
-                    <p>{{ e.start | date('m/d')}}{%  if e.isMultiDay %} - {{ e.end | date('m/d') }}{% endif %}</p>
-                    <p>{{ e.note }}</p>
-                </dd>
-            {%  endfor %}
-        </dl>
+                    </div>
+                {% endfor %}
+            </section>
+        {% else %}
+            <p>{{ 'No bike requests' | trans }}</p>
+        {% endif %}
+        {% if events | length > 0 %}
+            <section class="mx-0 my-2 border rounded" id="events">
+                <h2 class="border-bottom">{{ 'Events' | trans }}</h2>
+                {% for e in events %}<div class="row p-2">
+                        <dl class="col">
+                            <dt>{{ e.type.value | trans }} {{ e.name }} ({{ e.host }})</dt>
+                            <dd>
+                                <p>{{ e.start | date('m/d')}}{%  if e.isMultiDay %} - {{ e.end | date('m/d') }}{% endif %}</p>
+                                <p>{{ e.note }}</p>
+                            </dd> 
+                        </dl>
+                    </div>
+                {%  endfor %}
+            </section>
+        {% else %}
+            <p>{{ 'No events' | trans }}</p>
+        {% endif %}
     </article>
 {% endblock %}

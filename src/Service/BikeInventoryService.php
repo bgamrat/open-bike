@@ -18,7 +18,7 @@ use App\Repository\BikeRequestRepository;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Yaml\Yaml;
 
-class BikeInventory {
+class BikeInventoryService {
 
     public function __construct(#[Autowire('%kernel.project_dir%')] private $dir, private BikeRepository $bikeRepository, private BikeRequestRepository $bikeRequestRepository) {
         

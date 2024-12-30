@@ -41,7 +41,8 @@ class EventRepository extends ServiceEntityRepository {
 
     public function findByDate($date): ?array {
         return $this->createQueryBuilder('e')
-                        ->andWhere(':date BETWEEN e.start AND e.end')
+                        ->where(':date BETWEEN e.start AND e.end')
+                        ->orWhere('DATE_DIFF(e.start,:date) = 0')
                         ->setParameter('date', $date)
                         ->getQuery()
                         ->getResult()

@@ -35,7 +35,7 @@ class Event {
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $end = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $note = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]

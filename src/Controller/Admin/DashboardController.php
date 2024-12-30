@@ -1,5 +1,7 @@
 <?php
 
+/* TODO: Add localization support */
+
 /*
  * This file is part of open-bike.
  *
@@ -16,6 +18,7 @@ use App\Entity\Agency;
 use App\Entity\Bike;
 use App\Entity\BikeRequest;
 use App\Entity\Event;
+use App\Entity\Page;
 use App\Entity\Shift;
 use App\Entity\Volunteer;
 use App\Repository\BikeRequestRepository;
@@ -34,6 +37,7 @@ class DashboardController extends AbstractDashboardController {
             private BikeRequestRepository $bikeRequestRepository,
             private VolunteerRepository $volunteerRespository
     ) {
+        
     }
 
     #[Route('/admin', name: 'admin')]
@@ -43,10 +47,10 @@ class DashboardController extends AbstractDashboardController {
         $bikeRequests = $this->bikeRequestRepository->countByStatus([BikeRequestStatus::Pending]);
         $volunteers = $this->volunteerRespository->count();
         return $this->render('admin/dashboard.html.twig', [
-            'bike_status_chart' => $bikeStatusChart,
-            'bike_requests' => $bikeRequests,
-            'bike_request_chart' => $bikeRequestChart,
-            'volunteers' => $volunteers]);
+                    'bike_status_chart' => $bikeStatusChart,
+                    'bike_requests' => $bikeRequests,
+                    'bike_request_chart' => $bikeRequestChart,
+                    'volunteers' => $volunteers]);
     }
 
     public function configureDashboard(): Dashboard {
@@ -57,6 +61,7 @@ class DashboardController extends AbstractDashboardController {
     public function configureMenuItems(): iterable {
         yield MenuItem::linkToUrl('Home', 'fas fa-home', '/');
         yield MenuItem::linkToDashboard('Dashboard', 'fas fa-gauge');
+        yield MenuItem::linkToCrud('Pages', 'fas fa-file-text', Page::class);
         yield MenuItem::linkToCrud('Bikes', 'fas fa-bicycle', Bike::class);
         yield MenuItem::linkToCrud('Volunteers', 'fas fa-person', Volunteer::class);
         yield MenuItem::linkToCrud('Shifts', 'fas fa-business-time', Shift::class);

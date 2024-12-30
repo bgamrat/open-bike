@@ -44,7 +44,7 @@ ORDER BY br.date ASC';
 
     public function findByDate($date): ?array {
         return $this->createQueryBuilder('br')
-                        ->andWhere('br.date = :date')
+                        ->where('br.date = :date')
                         ->setParameter('date', $date)
                         ->getQuery()
                         ->getResult()

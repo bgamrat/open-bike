@@ -245,4 +245,11 @@ class Bike {
     public function setUpdatedAtValue(): void {
         $this->updatedAt = new \DateTimeImmutable();
     }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
 }

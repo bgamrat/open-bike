@@ -22,7 +22,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class EventCrudController extends AbstractCrudController {
@@ -38,14 +38,14 @@ class EventCrudController extends AbstractCrudController {
             TextField::new('name'),
             DateTimeField::new('start'),
             DateTimeField::new('end'),
-            TextareaField::new('note'),
-                    AssociationField::new('host')->setQueryBuilder(
+            TextEditorField::new('note')->onlyOnForms(),
+            AssociationField::new('host')->setQueryBuilder(
                             fn(QueryBuilder $queryBuilder) => $queryBuilder->getEntityManager()->getRepository(Volunteer::class)->findAll())
                     ->autocomplete(),
             CollectionField::new('recurrences')->onlyOnForms()->useEntryCrudForm()->allowAdd(true)->allowDelete(true)
         ];
     }
-
+/*
     public function addRecurrence(Recurrence $recurrence): void {
         $recurrence->setEvent($this);
 
@@ -57,4 +57,6 @@ class EventCrudController extends AbstractCrudController {
     public function removeRecurrence(Recurrence $recurrence): void {
         $this->recurrences->removeElement($recurrence);
     }
+ * */
+
 }
