@@ -21,7 +21,6 @@ use App\Repository\PageRepository;
 class PageService {
 
     public function __construct(private PageRepository $pageRepository) {
-
     }
 
     public function home(): ?string {

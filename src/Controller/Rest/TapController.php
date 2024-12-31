@@ -20,7 +20,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Webmozart\Assert\InvalidArgumentException;
-use function dd;
 use function Symfony\Component\Clock\now;
 
 /**

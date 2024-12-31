@@ -23,6 +23,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class DefaultController extends AbstractController {
 
     #[Route('/{_locale<%app.supported_locales%>}/', name: 'home')]
+    #[Route('/page/{_locale<%app.supported_locales%>}/home', name: 'home-page')] // the home page should look the same
     public function index(): Response {
         $bikeRequest = new BikeRequest();
         $bikeRequestForm = $this->createForm(BikeRequestType::class, $bikeRequest);

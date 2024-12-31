@@ -87,6 +87,9 @@ class Bike {
     #[Gedmo\Timestampable]
     public ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0, nullable: true)]
+    private ?string $value = null;
+
     public function __construct() {
         $this->recipient = new ArrayCollection();
 	$this->updatedAt = new DateTimeImmutable();
@@ -249,6 +252,18 @@ class Bike {
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    public function setValue(string $value): static
+    {
+        $this->value = $value;
 
         return $this;
     }

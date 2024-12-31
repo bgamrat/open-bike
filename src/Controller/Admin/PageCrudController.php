@@ -34,11 +34,11 @@ class PageCrudController extends AbstractCrudController {
         $locales = explode('|', $this->supportedLocales);
         $localeChoices = array_combine($locales,$locales);
         return [
-            IdField::new('id')->hideOnForm(),
+            IdField::new('id')->hideOnForm()->hideOnIndex(),
             IntegerField::new('position'),
             TextField::new('name'),
-            TextField::new('shortName'),
-            TextEditorField::new('content')->onlyOnForms()->setNumOfRows(25),
+            TextField::new('shortName')->hideOnIndex(),
+            TextEditorField::new('content')->hideOnIndex()->setNumOfRows(25),
             // no hierarchy - much simpler
             //AssociationField::new('parent')->setRequired(false),
             ChoiceField::new('locale')->setChoices($localeChoices)->autocomplete()->setValue($this->defaultLocale),

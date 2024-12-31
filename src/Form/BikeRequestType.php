@@ -33,19 +33,18 @@ class BikeRequestType extends AbstractType {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void {
+        $commonOptions = ['trim' => true, 'required' => true, 'sanitize_html' => true
+        ];
         $builder
-                ->add('clientName', TextType::class, ['required' => true, 'sanitize_html' => true
-                ])
-                ->add('contact', TextType::class, ['required' => true, 'sanitize_html' => true
-                ])
+                ->add('clientName', TextType::class, $commonOptions)
+                ->add('contact', TextType::class, ['trim' => true, 'required' => true])
                 ->add('date', DateType::class, ['required' => true,
                     'attr' => [
                         //'readonly' => true,
                         'value' => \date('Y-m-d', \strtotime('next monday')),
                         'min' => \date('Y-m-d', \strtotime('next monday')), 'max' => \date('Y-m-d', \strtotime("+1 month")), 'step' => 7]
                 ])
-                ->add('height', TextType::class, ['required' => true, 'sanitize_html' => true
-                ])
+                ->add('height', TextType::class, $commonOptions)
                 ->add('referrer', EntityType::class, [
                     'required' => true,
                     'class' => Agency::class,

@@ -6,6 +6,7 @@ use App\Repository\VolunteerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VolunteerRepository::class)]
 class Volunteer {
@@ -15,17 +16,23 @@ class Volunteer {
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 32)]
     private ?string $firstName = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 32)]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 16, nullable: true)]
     private ?string $phone = null;
 
+    #[Assert\Email]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $email = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    protected ?string $image;
 
     #[ORM\OneToOne(inversedBy: 'volunteer', cascade: ['persist', 'remove'])]
     private ?User $user = null;
@@ -107,6 +114,15 @@ class Volunteer {
         return $this;
     }
 
+    public function setImage(?string $file = null): void {
+        $this->image = $file;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
     /**
      * @return Collection<int, Shift>
      */
@@ -137,13 +153,11 @@ class Volunteer {
     /**
      * @return Collection<int, Event>
      */
-    public function getEvents(): Collection
-    {
+    public function getEvents(): Collection {
         return $this->events;
     }
 
-    public function addEvent(Event $event): static
-    {
+    public function addEvent(Event $event): static {
         if (!$this->events->contains($event)) {
             $this->events->add($event);
             $event->setHost($this);
@@ -152,8 +166,7 @@ class Volunteer {
         return $this;
     }
 
-    public function removeEvent(Event $event): static
-    {
+    public function removeEvent(Event $event): static {
         if ($this->events->removeElement($event)) {
             // set the owning side to null (unless already changed)
             if ($event->getHost() === $this) {
@@ -168,13 +181,11 @@ class Volunteer {
         return $this->firstName . ' ' . $this->lastName;
     }
 
-    public function getTagId(): ?int
-    {
+    public function getTagId(): ?int {
         return $this->tagId;
     }
 
-    public function setTagId(?int $tagId): static
-    {
+    public function setTagId(?int $tagId): static {
         $this->tagId = $tagId;
 
         return $this;

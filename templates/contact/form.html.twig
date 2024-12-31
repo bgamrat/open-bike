@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Contact us' | trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'Contact us'| trans }}</h1>
+    <p>{{ 'contact_instructions' | trans }}</p>
+    {{ form(contact_form) }}
+{% endblock %}

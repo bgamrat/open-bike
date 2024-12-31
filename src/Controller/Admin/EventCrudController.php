@@ -13,9 +13,11 @@ namespace App\Controller\Admin;
 
 use App\Config\Event\Type;
 use App\Entity\Event;
-use App\Entity\Recurrence;
 use App\Entity\Volunteer;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -31,6 +33,13 @@ class EventCrudController extends AbstractCrudController {
         return Event::class;
     }
 
+    public function configureActions(Actions $actions): Actions {
+        return $actions
+                        ->add(Crud::PAGE_INDEX, Action::DETAIL)
+
+        ;
+    }
+
     public function configureFields(string $pageName): iterable {
         return [
             IdField::new('id')->hideOnForm(),
@@ -38,11 +47,11 @@ class EventCrudController extends AbstractCrudController {
             TextField::new('name'),
             DateTimeField::new('start'),
             DateTimeField::new('end'),
-            TextEditorField::new('note')->onlyOnForms(),
+            TextEditorField::new('note')->hideOnIndex(),
             AssociationField::new('host')->setQueryBuilder(
                             fn(QueryBuilder $queryBuilder) => $queryBuilder->getEntityManager()->getRepository(Volunteer::class)->findAll())
                     ->autocomplete(),
-            CollectionField::new('recurrences')->onlyOnForms()->useEntryCrudForm()->allowAdd(true)->allowDelete(true)
+            CollectionField::new('recurrences')->hideOnIndex()->useEntryCrudForm()->allowAdd(true)->allowDelete(true)
         ];
     }
 /*

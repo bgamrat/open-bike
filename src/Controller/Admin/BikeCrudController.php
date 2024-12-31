@@ -20,6 +20,9 @@ use App\Entity\Bike;
 use App\Entity\BikeRequest;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminCrud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -36,22 +39,30 @@ class BikeCrudController extends AbstractCrudController {
         return Bike::class;
     }
 
+    public function configureActions(Actions $actions): Actions {
+        return $actions
+                        ->add(Crud::PAGE_INDEX, Action::DETAIL)
+
+        ;
+    }
+
     public function configureFields(string $pageName): iterable {
         return [
-            IdField::new('id')->hideOnForm(),
+            IdField::new('id')->hideOnForm()->hideOnIndex(),
             TextField::new('serialNumber'),
             TextField::new('brand'),
             TextField::new('model'),
             ChoiceField::new('size')->setChoices(Size::cases())->autocomplete(),
-            IntegerField::new('speeds'),
-            NumberField::new('wheelSize'),
-            ChoiceField::new('color')->setChoices(Color::cases())->autocomplete(),
+            IntegerField::new('speeds')->hideOnIndex(),
+            NumberField::new('wheelSize')->hideOnIndex(),
+            ChoiceField::new('color')->hideOnIndex()->setChoices(Color::cases())->autocomplete(),
             ChoiceField::new('type')->setChoices(Type::cases())->autocomplete(),
             ChoiceField::new('status')->setChoices(Status::cases())->autocomplete(),
-            TextareaField::new('note'),
-            AssociationField::new('recipient')->setQueryBuilder(
-                    fn(QueryBuilder $queryBuilder) => $queryBuilder->getEntityManager()->getRepository(BikeRequest::class)->findBy(['status' => BikeRequestStatus::Pending, 'bike' => null]))
-                ->autocomplete()
+            TextareaField::new('note')->hideOnIndex(),
+            NumberField::new('value'),
+                    AssociationField::new('recipient')->hideOnIndex()->setQueryBuilder(
+                            fn(QueryBuilder $queryBuilder) => $queryBuilder->getEntityManager()->getRepository(BikeRequest::class)->findBy(['status' => BikeRequestStatus::Pending, 'bike' => null]))
+                    ->autocomplete()
         ];
     }
 }
