@@ -13,15 +13,19 @@
 
 namespace App\Controller\Admin;
 
+use App\Config\Bike\Status as BikeStatus;
 use App\Config\BikeRequest\Status as BikeRequestStatus;
 use App\Entity\Agency;
 use App\Entity\Bike;
 use App\Entity\BikeRequest;
+use App\Entity\Contact;
 use App\Entity\Event;
 use App\Entity\Page;
 use App\Entity\Shift;
 use App\Entity\Volunteer;
+use App\Repository\BikeRepository;
 use App\Repository\BikeRequestRepository;
+use App\Repository\ShiftRepository;
 use App\Repository\VolunteerRepository;
 use App\Service\ChartService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -34,8 +38,10 @@ class DashboardController extends AbstractDashboardController {
 
     public function __construct(
             private ChartService $chartService,
+            private BikeRepository $bikeRepository,
             private BikeRequestRepository $bikeRequestRepository,
-            private VolunteerRepository $volunteerRespository
+            private VolunteerRepository $volunteerRespository,
+            private ShiftRepository $shiftRepository
     ) {
         
     }
@@ -43,14 +49,24 @@ class DashboardController extends AbstractDashboardController {
     #[Route('/admin', name: 'admin')]
     public function index(): Response {
         $bikeStatusChart = $this->chartService->makeBikeStatusChart();
+        $bikeStatusAllChart = $this->chartService->makeBikeStatusAllChart();
+        $totalVolunteerHours = $this->shiftRepository->countHours()['total'] / 3600;
+        $volunteerHoursChart = $this->chartService->makeVolunteerHoursChart();
         $bikeRequestChart = $this->chartService->makeBikeRequestChart();
         $bikeRequests = $this->bikeRequestRepository->countByStatus([BikeRequestStatus::Pending]);
+        $bikesReadyForClients = $this->bikeRepository->countByStatus([BikeStatus::ReadyForClient]);
         $volunteers = $this->volunteerRespository->count();
+        $totalBikes = $this->bikeRepository->count();
         return $this->render('admin/dashboard.html.twig', [
                     'bike_status_chart' => $bikeStatusChart,
+                    'bike_status_all_chart' => $bikeStatusAllChart,
                     'bike_requests' => $bikeRequests,
                     'bike_request_chart' => $bikeRequestChart,
-                    'volunteers' => $volunteers]);
+                    'volunteers' => $volunteers,
+                    'total_volunteer_hours' => $totalVolunteerHours,
+                    'total_bikes' => $totalBikes,
+                    'bikes_ready_for_clients' => $bikesReadyForClients,
+                    'volunteer_hours_chart' => $volunteerHoursChart]);
     }
 
     public function configureDashboard(): Dashboard {
@@ -68,5 +84,6 @@ class DashboardController extends AbstractDashboardController {
         yield MenuItem::linkToCrud('Events', 'fas fa-calendar', Event::class);
         yield MenuItem::linkToCrud('Bike Requests', 'fas fa-hand-pointer', BikeRequest::class);
         yield MenuItem::linkToCrud('Agencies', 'fas fa-building', Agency::class);
+        yield MenuItem::linkToCrud('Contacts', 'fas fa-envelope', Contact::class);
     }
 }

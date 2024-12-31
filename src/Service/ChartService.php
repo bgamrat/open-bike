@@ -2,10 +2,14 @@
 
 namespace App\Service;
 
-use App\Config\BikeRequest\Status as BikeRequestStatus;
 use App\Config\Bike\Status as BikeStatus;
+use App\Config\BikeRequest\Status as BikeRequestStatus;
 use App\Repository\BikeRepository;
 use App\Repository\BikeRequestRepository;
+use App\Repository\ShiftRepository;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 
@@ -19,7 +23,8 @@ class ChartService {
     public function __construct(
             private ChartBuilderInterface $chartBuilder,
             private BikeRepository $bikeRepository,
-            private BikeRequestRepository $bikeRequestRepository) {
+            private BikeRequestRepository $bikeRequestRepository,
+            private ShiftRepository $shiftRepository) {
 
     }
 
@@ -47,7 +52,33 @@ class ChartService {
                     'suggestedMax' => max($data) * 1.1,
                 ],
             ],
-           'plugins'=>['autocolors' => ['mode' => 'data']]
+            'plugins' => ['autocolors' => ['mode' => 'data']]
+        ]);
+        return $chart;
+    }
+
+    public function makeBikeStatusAllChart() {
+        $chart = $this->chartBuilder->createChart(Chart::TYPE_BAR);
+        $data = [];
+        $bikeStatuses = BikeStatus::cases();
+        foreach ($bikeStatuses as $status) {
+            $data[] = $this->bikeRepository->countByStatus([$status]);
+        }
+        $chart->setData([
+            'labels' => $bikeStatuses,
+            'datasets' => [[
+            'label' => 'Bikes',
+            'data' => $data
+                ]]
+        ]);
+        $chart->setOptions([
+            'scales' => [
+                'y' => [
+                    'suggestedMin' => 0,
+                    'suggestedMax' => max($data) * 1.1,
+                ],
+            ],
+            'plugins' => ['autocolors' => ['mode' => 'data']]
         ]);
         return $chart;
     }
@@ -58,14 +89,14 @@ class ChartService {
         foreach (BikeRequestStatus::cases() as $s) {
             $bikeRequestStatus[] = $s->value;
         }
-        $datasets = array_fill_keys($bikeRequestStatus,['label' => '','data' => []]);
+        $datasets = array_fill_keys($bikeRequestStatus, ['label' => '', 'data' => []]);
         foreach ($datasets as $k => $ds) {
             $datasets[$k]['label'] = $k;
         }
         $data = $this->bikeRequestRepository->countByStatusGroupByYearMonth();
-        $firstDate = new \DateTime($data[0]['yearmonth']);
-        $lastDate = new \DateTime($data[count($data)-1]['yearmonth']);
-        $datePeriod = new \DatePeriod($firstDate,new \DateInterval('P1M'),$lastDate->add(new \DateInterval('P1D')));
+        $firstDate = new DateTime($data[0]['yearmonth']);
+        $lastDate = new DateTime($data[count($data) - 1]['yearmonth']);
+        $datePeriod = new DatePeriod($firstDate, new DateInterval('P1M'), $lastDate->add(new DateInterval('P1D')));
         foreach ($datePeriod as $date) {
             $dateString = $date->format('Y-M');
             $labels[] = $dateString;
@@ -85,7 +116,34 @@ class ChartService {
             'labels' => $labels,
             'datasets' => $arr
         ]);
-        $chart->setOptions(['plugins'=>['autocolors' => ['mode' => 'dataset']]]);
+        $chart->setOptions(['plugins' => ['autocolors' => ['mode' => 'dataset']]]);
+        return $chart;
+    }
+
+    public function makeVolunteerHoursChart() {
+        $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+        $data = $this->shiftRepository->countByYearMonth();
+        $firstDate = new DateTime($data[0]['yearmonth']);
+        $lastDate = new DateTime($data[count($data) - 1]['yearmonth']);
+        $datePeriod = new DatePeriod($firstDate, new DateInterval('P1M'), $lastDate->add(new DateInterval('P1D')));
+        $labels = [];
+        $assocData = [];
+        foreach ($datePeriod as $date) {
+            $dateString = $date->format('Y-M');
+            $labels[] = $dateString;
+            $assocData[$dateString] = 0;
+        }
+        foreach ($data as $d) {
+            $assocData[$d['yearmonth']] = $d['hours'];
+        }
+
+        $arr = [['label' => 'Hours', 'data' => array_values($assocData)]];
+
+        $chart->setData([
+            'labels' => $labels,
+            'datasets' => $arr
+        ]);
+        $chart->setOptions(['plugins' => ['autocolors' => ['mode' => 'dataset']]]);
         return $chart;
     }
 }

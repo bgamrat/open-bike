@@ -31,7 +31,7 @@ class ContactType extends AbstractType {
                         'message' => 'karser_recaptcha3.message',
                         'messageMissingValue' => 'karser_recaptcha3.message_missing_value',
                     ])])
-                ->add('save', SubmitType::class)
+                ->add('submit', SubmitType::class)
         ;
     }
 

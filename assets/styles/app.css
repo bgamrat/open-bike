@@ -8,10 +8,14 @@
  */
 
 :root {
-    
+    color: green;
 }
 
 .required::before {
     color:#800;
     content:"* ";
+}
+
+.badge.badge-danger {
+    background-color: var(--bs-danger);
 }

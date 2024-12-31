@@ -31,6 +31,11 @@ class Volunteer {
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $email = null;
 
+    #[Assert\Regex(
+                pattern: '/[a-z][a-z\',. -]{2,60}\.(png|jpe?g|gif|webp|jfif)$/i',
+                message: 'invalid image file',
+                normalizer: trim
+        )]
     #[ORM\Column(length: 255, nullable: true)]
     protected ?string $image;
 
@@ -118,8 +123,7 @@ class Volunteer {
         $this->image = $file;
     }
 
-    public function getImage(): ?string
-    {
+    public function getImage(): ?string {
         return $this->image;
     }
 

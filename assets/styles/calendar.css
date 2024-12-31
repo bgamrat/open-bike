@@ -19,6 +19,7 @@
 .event .name {
     font-weight: 700;
 }
+
 .event .start,
 .event .end {
     display: inline-block;

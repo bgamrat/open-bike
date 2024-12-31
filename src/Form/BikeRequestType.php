@@ -36,19 +36,23 @@ class BikeRequestType extends AbstractType {
         $commonOptions = ['trim' => true, 'required' => true, 'sanitize_html' => true
         ];
         $builder
-                ->add('clientName', TextType::class, $commonOptions)
-                ->add('contact', TextType::class, ['trim' => true, 'required' => true])
+                ->add('clientName', TextType::class, $commonOptions + ['attr' => ['placeholder' => 'Your name']])
+                ->add('contact', TextType::class, ['trim' => true,
+                    'required' => true,
+                    'help' => 'Please provide an email address or phone number or other way we can contact you'])
                 ->add('date', DateType::class, ['required' => true,
+                    'help' => 'appointment_instructions',
                     'attr' => [
                         //'readonly' => true,
                         'value' => \date('Y-m-d', \strtotime('next monday')),
                         'min' => \date('Y-m-d', \strtotime('next monday')), 'max' => \date('Y-m-d', \strtotime("+1 month")), 'step' => 7]
                 ])
-                ->add('height', TextType::class, $commonOptions)
+                ->add('height', TextType::class, $commonOptions + ['help' => 'Please enter your height so we know what size bike you need'])
                 ->add('referrer', EntityType::class, [
                     'required' => true,
                     'class' => Agency::class,
                     'choice_label' => 'name',
+                    'help' => 'Please let us know which agency referred you'
                 ])
                 ->add('captcha', Recaptcha3Type::class, [
                     'action_name' => 'social',
@@ -56,7 +60,7 @@ class BikeRequestType extends AbstractType {
                         'message' => 'karser_recaptcha3.message',
                         'messageMissingValue' => 'karser_recaptcha3.message_missing_value',
                     ])])
-                ->add('save', SubmitType::class)
+                ->add('submit', SubmitType::class)
         ;
     }
 }

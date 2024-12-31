@@ -1,6 +1,32 @@
-{% if bike_inventory.bikes_available %}
-    <h2>{{  'Request details' | trans }}</h2>
-    <p><em>{{ 'request_bike_important'| trans }}</em></p>
-    <p>{{ 'request_bike_instructions' | trans }}</p>
-    {{ form(bike_request_form) }}
-{% endif %}
+<h2>{{  'Request details' | trans }}</h2>
+<p><em>{{ 'request_bike_important'| trans }}</em></p>
+<p><a href="{{ asset('static/RequestForm.pdf') }}">{{ 'Request Form' | trans }}</a></p>
+<p><strong>{{ 'request_bike_instructions' | trans }}</strong></p>
+{{ form_start(form) }}
+<div class="row">
+    <div class="col">
+        {{ form_errors(form) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        {{ form_row(form.clientName) }}
+    </div>
+    <div class="col-3">
+        {{ form_row(form.contact) }}
+    </div>
+    <div class="col-2">
+        {{ form_row(form.height) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-2">
+        {{ form_row(form.date) }}
+    </div>
+    <div class="col-4">
+        {{ form_row(form.referrer) }}
+    </div>
+</div>
+
+{{ form_row(form.submit, { 'label': 'Submit' }) }}
+{{ form_end(form) }}

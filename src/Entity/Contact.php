@@ -33,6 +33,12 @@ class Contact
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $note = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $dt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $update_dt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -94,6 +100,30 @@ class Contact
     public function setNote(?string $note): static
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function getDt(): ?\DateTimeImmutable
+    {
+        return $this->dt;
+    }
+
+    public function setDt(\DateTimeImmutable $dt): static
+    {
+        $this->dt = $dt;
+
+        return $this;
+    }
+
+    public function getUpdateDt(): ?\DateTimeInterface
+    {
+        return $this->update_dt;
+    }
+
+    public function setUpdateDt(?\DateTimeInterface $update_dt): static
+    {
+        $this->update_dt = $update_dt;
 
         return $this;
     }

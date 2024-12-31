@@ -27,13 +27,19 @@ class ShiftRepository extends ServiceEntityRepository {
         ;
     }
 
-    //    public function findOneBySomeField($value): ?Shift
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function countByYearMonth(): ?array {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = '
+SELECT DATE_FORMAT(s.start_date_time,"%Y-%b") yearmonth, SUM((s.end_date_time - s.start_date_time)/3600) hours FROM shift s
+GROUP BY YEAR(s.start_date_time),MONTH(s.start_date_time)
+ORDER BY s.start_date_time ASC';
+        $resultSet = $conn->executeQuery($sql);
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function countHours(): array {
+        return $this->createQueryBuilder('s')
+                        ->select('SUM(s.endDateTime - s.startDateTime) AS total')
+                        ->getQuery()->getOneOrNullResult();
+    }
 }

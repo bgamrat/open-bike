@@ -21,11 +21,11 @@
                         <li class="nav-item"><a class="nav-link" href="{{ path('page', { slug: p.slug }) }}">{{ p.name | trans }}</a></li>
                         {% endfor %}
                 {%  endif %}
-                {% if bike_inventory.bikes_available %}
+                {#% if bike_inventory.bikes_available %#}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('bike-request') }}">{{ 'Request a bike' | trans }}</a>
                     </li>
-                {% endif %}
+                {#% endif %#}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('contact-us') }}">{{ 'Contact us' | trans }}</a>
                 </li>
@@ -41,6 +41,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarAdminDropdown">
                             <li class="nav-item"><a class="nav-link" href="{{ path('admin') }}">{{ 'Admin' | trans }}</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li class="nav-item"><a class="nav-link" href="{{ path('settings', { type: 'distribution' }) }}">{{ 'Distribution' | trans }}</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ path('settings', { type: 'inventory' }) }}">{{ 'Inventory' | trans }}</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ path('language', { type: 'messages', language: 'en' }) }}">{{ 'en-US' | trans }}</a></li>

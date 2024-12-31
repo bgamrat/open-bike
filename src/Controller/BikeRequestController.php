@@ -28,14 +28,13 @@ class BikeRequestController extends AbstractController {
         $bikeRequest = new BikeRequest();
         $form = $this->createForm(BikeRequestType::class, $bikeRequest);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $bikeRequest = $form->getData();
             $entityManager->persist($bikeRequest);
             $entityManager->flush();
             return $this->redirectToRoute('bike-request-instructions', ['id' => $bikeRequest->getId()]);
         }
-        return $this->render('bike_request/new.html.twig', ['bike_request_form' => $form]);
+        return $this->render('bike_request/new.html.twig', ['form' => $form]);
     }
 
     #[Route('/bike-request-instructions/{id}', name: 'bike-request-instructions', requirements: ['id' => '\d+'])]

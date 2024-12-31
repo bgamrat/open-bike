@@ -14,7 +14,7 @@
 
 {% block body %}
     <h1>{{ 'organization_name'| trans }}</h1>
-    {% if not bike_inventory.bikes_available %}
+    {#% if not bike_inventory.bikes_available %}
         <div class="row">
             <div class="col">
                 <div class="alert alert-info my-2" role="alert">
@@ -22,18 +22,15 @@
                 </div>
             </div>
         </div>
-    {% endif %}
+    {% endif %#}
     <article>
-        <div class="row">
-            <div class="col">
-                <section id="overview">
+        <section id="overview">
+            <div class="row">
+                <div class="col">
                     <h2><img src="{{ org_logo }}" alt="{{ 'organization_name'|trans }} {{ 'logo' | trans }}"></h2>
                         {{ pages.home | raw }}
-                </section>
-                <section id="request">
-                    {% include 'bike_request/form.html.twig' %}
-                </section>
+                </div>
             </div>
-        </div>
+        </section>
     </article>
 {% endblock %}
