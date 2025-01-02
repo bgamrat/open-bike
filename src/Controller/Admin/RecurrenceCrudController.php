@@ -11,12 +11,9 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Event;
 use App\Entity\Recurrence;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class RecurrenceCrudController extends AbstractCrudController {
 
@@ -28,14 +25,6 @@ class RecurrenceCrudController extends AbstractCrudController {
         return [
             DateTimeField::new('datetime')
         ];
-    }
-
-    public function createEntity(string $entityFqcn)
-    {
-        $recurrence = new Recurrence();
-        $recurrence->event($this->getEvent());
-
-        return $recurrence;
     }
 
 }

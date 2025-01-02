@@ -32,9 +32,8 @@ class Volunteer {
     private ?string $email = null;
 
     #[Assert\Regex(
-                pattern: '/[a-z][a-z\',. -]{2,60}\.(png|jpe?g|gif|webp|jfif)$/i',
-                message: 'invalid image file',
-                normalizer: trim
+                pattern: '/[\w\'.-]{2,60}\.(png|jpe?g|gif|webp|jfif)$/i',
+                message: 'Invalid image file'
         )]
     #[ORM\Column(length: 255, nullable: true)]
     protected ?string $image;

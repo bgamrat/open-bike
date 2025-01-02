@@ -5,7 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.default_locale: '%kernel.default_locale%'
-    app.supported_locales: '%kernel.default_locale%|fr'
+    app.supported_locales: '%kernel.default_locale%'
+
 
 services:
     # default configuration for services in *this* file
@@ -14,8 +15,10 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             string $defaultLocale: '%app.default_locale%'
-            string $supportedLocales: '%app.supported_locales%' 
-            string $uploadDirectory: '%kernel.project_dir%/public/uploads'
+            string $supportedLocales: '%app.supported_locales%'
+            string $projectDir: '%kernel.project_dir%'
+            # must match Document $crudUploadDir
+            string $documentDir: '/uploads/files'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -26,5 +29,22 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Controller\Admin\DocumentCrudController:
+        arguments:
+            $basePath: 'uploads/files/'
+            $crudUploadDir: '/public/uploads/files'
+
+    App\Controller\Admin\GalleryCrudController:
+        arguments:
+            $basePath: 'uploads/images/'
+            $crudUploadDir: '/public/uploads/images'
+
+    App\Controller\Admin\ImageCrudController:
+        arguments:
+            $basePath: 'uploads/images/'
+            $crudUploadDir: '/public/uploads/images'
+
+    App\Controller\Admin\VolunteerCrudController:
+        arguments:
+            $basePath: 'uploads/volunteers/'
+            $crudUploadDir: '/public/uploads/volunteers'

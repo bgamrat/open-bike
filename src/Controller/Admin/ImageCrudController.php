@@ -11,31 +11,37 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Event;
-use App\Entity\Recurrence;
+use App\Entity\Image as AppImage;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Validator\Constraints\Image;
 
-class RecurrenceCrudController extends AbstractCrudController {
+class ImageCrudController extends AbstractCrudController {
+
+    public function __construct(
+            private string $crudUploadDir,
+            private string $basePath
+    ) {
+
+    }
 
     public static function getEntityFqcn(): string {
-        return Recurrence::class;
+        return AppImage::class;
     }
 
     public function configureFields(string $pageName): iterable {
         return [
-            DateTimeField::new('datetime')
+            IdField::new('id')->hideOnForm()->hideOnIndex(),
+            TextField::new('title'),
+            TextField::new('description')->hideOnIndex(),
+            TextareaField::new('altText')->hideOnIndex(),
+                    ImageField::new('file')
+                    ->setUploadDir($this->crudUploadDir)
+                    ->setBasePath($this->basePath)
+                    ->setFileConstraints(new Image(maxSize: '1M'))
         ];
     }
-
-    public function createEntity(string $entityFqcn)
-    {
-        $recurrence = new Recurrence();
-        $recurrence->event($this->getEvent());
-
-        return $recurrence;
-    }
-
 }

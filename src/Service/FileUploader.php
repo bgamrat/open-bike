@@ -19,32 +19,39 @@ use function dd;
 
 class FileUploader {
 
-    public const IMAGES = 'images';
-
     public function __construct(
-            private ?string $uploadDirectory,
+            private string $projectDir,
             private SluggerInterface $slugger
     ) {
 
     }
 
-    // this isn't a regular PHP file upload, it moves to support EasyAdmin
-    public function uploadImageField(string $contentType, File $file): string {
+    // this isn't a regular PHP file upload, it moves images to support EasyAdmin
+    public function uploadImageField(string $basePath, File $file, string $id): string {
 
-        $safeFilename = $this->slugger->slug(pathinfo($file,PATHINFO_FILENAME));
-        $fileName = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+        $targetDirectory = $this->getTargetDirectory('public/' . $basePath);
+
+        $existingVersions = glob($targetDirectory.'/'.$id.'.*');
+        foreach ($existingVersions as $f) {
+            unlink($f);
+        }
+        $filename = $id . '.' . $file->guessExtension();
+
         try {
-            $file->move($this->getTargetDirectory($contentType), $fileName);
+            $file->move($targetDirectory, $filename);
+
         } catch (FileException $e) {
-            dd($this->getTargetDirectory($contentType),$file,$e);
+            dd($this->getTargetDirectory($basePath), $file, $e);
             dd($e);
         }
 
-        return $fileName;
+        return $filename;
     }
 
-    public function getTargetDirectory(string $type): string {
-        $dir = $this->uploadDirectory . '/' . $type;
+    public function getTargetDirectory(string $basePath): string {
+
+        $dir = $this->projectDir . '/' . $basePath;
+
         if (!is_dir($dir)) {
             throw new DirectoryNotFoundException($dir);
         }

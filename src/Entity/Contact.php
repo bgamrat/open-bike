@@ -3,11 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\ContactRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Contact
 {
     #[ORM\Id]
@@ -33,11 +37,16 @@ class Contact
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $note = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $dt = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?DateTimeImmutable $dt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $update_dt = null;
+    #[Gedmo\Timestampable]
+    private ?DateTimeInterface $update_dt = null;
+
+    public function __construct() {
+	$this->dt = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -104,24 +113,24 @@ class Contact
         return $this;
     }
 
-    public function getDt(): ?\DateTimeImmutable
+    public function getDt(): ?DateTimeImmutable
     {
         return $this->dt;
     }
 
-    public function setDt(\DateTimeImmutable $dt): static
+    public function setDt(DateTimeImmutable $dt): static
     {
         $this->dt = $dt;
 
         return $this;
     }
 
-    public function getUpdateDt(): ?\DateTimeInterface
+    public function getUpdateDt(): ?DateTimeInterface
     {
         return $this->update_dt;
     }
 
-    public function setUpdateDt(?\DateTimeInterface $update_dt): static
+    public function setUpdateDt(?DateTimeInterface $update_dt): static
     {
         $this->update_dt = $update_dt;
 

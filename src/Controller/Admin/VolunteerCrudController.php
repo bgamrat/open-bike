@@ -30,7 +30,10 @@ use Symfony\Component\Validator\Constraints\Image;
 
 class VolunteerCrudController extends AbstractCrudController {
 
-    public function __construct(private string $uploadDirectory,
+    public function __construct(
+            private string $projectDir,
+            private string $crudUploadDir,
+            private string $basePath,
             private FileUploader $fileUploader) {
 
     }
@@ -54,8 +57,8 @@ class VolunteerCrudController extends AbstractCrudController {
             EmailField::new('email')->setHtmlAttributes(['placeholder' => 'superseded_by_user_account_email']),
             TelephoneField::new('phone'),
                     ImageField::new('image')->hideOnIndex()
-                    ->setUploadDir('/public/uploads/')
-                    ->setBasePath('uploads/images/')
+                    ->setUploadDir($this->crudUploadDir)
+                    ->setBasePath($this->basePath)
                     ->setFileConstraints(new Image(maxSize: '1M'))
                     ->setUploadedFileNamePattern('[contenthash].[extension]'),
             IntegerField::new('tagId')->hideOnIndex(),
@@ -65,11 +68,19 @@ class VolunteerCrudController extends AbstractCrudController {
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
 
-        $imageFile = new File($this->uploadDirectory . '/logo.png', $entityInstance->getImage());
+        $image = $entityInstance->getImage();
 
-        if (!empty($imageFile)) {
-            $imageFileName = $this->fileUploader->uploadImageField(FileUploader::IMAGES, $imageFile);
-            $entityInstance->setImage($imageFileName);
+        // check if an image exists
+        if (!empty($image)) {
+
+            // create a File reference to the image
+            $imageFile = new File($this->projectDir . $this->crudUploadDir . '/' . $image);
+
+            // (try to) move the uploaded image to the volunteer images directory
+            $imageFilename = $this->fileUploader->uploadImageField($this->basePath, $imageFile, $entityInstance->getId());
+
+            // update the path in the entity
+            $entityInstance->setImage($imageFilename);
         }
         parent::updateEntity($entityManager, $entityInstance);
     }

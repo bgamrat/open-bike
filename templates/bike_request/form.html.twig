@@ -1,6 +1,10 @@
 <h2>{{  'Request details' | trans }}</h2>
 <p><em>{{ 'request_bike_important'| trans }}</em></p>
-<p><a href="{{ asset('static/RequestForm.pdf') }}">{{ 'Request Form' | trans }}</a></p>
+{# quick fallback because sometimes stuff doesn't work #}
+{% if request_form_file is null %}
+    {% set request_form_file = asset('static/RequestForm.pdf') %}
+{% endif %}
+<p><a href="{{ request_form_file }}" download="BikeRequestForm.pdf" >{{ 'Request Form' | trans }}</a></p>
 <p><strong>{{ 'request_bike_instructions' | trans }}</strong></p>
 {{ form_start(form) }}
 <div class="row">

@@ -19,7 +19,9 @@ use App\Entity\Agency;
 use App\Entity\Bike;
 use App\Entity\BikeRequest;
 use App\Entity\Contact;
+use App\Entity\Document;
 use App\Entity\Event;
+use App\Entity\Gallery;
 use App\Entity\Page;
 use App\Entity\Shift;
 use App\Entity\Volunteer;
@@ -77,13 +79,18 @@ class DashboardController extends AbstractDashboardController {
     public function configureMenuItems(): iterable {
         yield MenuItem::linkToUrl('Home', 'fas fa-home', '/');
         yield MenuItem::linkToDashboard('Dashboard', 'fas fa-gauge');
-        yield MenuItem::linkToCrud('Pages', 'fas fa-file-text', Page::class);
+        yield MenuItem::section('Operations');
         yield MenuItem::linkToCrud('Bikes', 'fas fa-bicycle', Bike::class);
         yield MenuItem::linkToCrud('Volunteers', 'fas fa-person', Volunteer::class);
         yield MenuItem::linkToCrud('Shifts', 'fas fa-business-time', Shift::class);
         yield MenuItem::linkToCrud('Events', 'fas fa-calendar', Event::class);
+        yield MenuItem::linkToCrud('Contacts', 'fas fa-envelope', Contact::class);
+        yield MenuItem::section('Clients');
         yield MenuItem::linkToCrud('Bike Requests', 'fas fa-hand-pointer', BikeRequest::class);
         yield MenuItem::linkToCrud('Agencies', 'fas fa-building', Agency::class);
-        yield MenuItem::linkToCrud('Contacts', 'fas fa-envelope', Contact::class);
+        yield MenuItem::section('Content');
+        yield MenuItem::linkToCrud('Pages', 'fas fa-file-text', Page::class);
+        yield MenuItem::linkToCrud('Documents', 'fas fa-file-pdf', Document::class);
+        yield MenuItem::linkToCrud('Gallery', 'fas fa-images', Gallery::class);
     }
 }

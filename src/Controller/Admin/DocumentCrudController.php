@@ -11,31 +11,62 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Event;
-use App\Entity\Recurrence;
+use App\Admin\Field\FileField;
+use App\Entity\Document;
+use App\Service\FileUploader;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints\Image;
 
-class RecurrenceCrudController extends AbstractCrudController {
+class DocumentCrudController extends AbstractCrudController {
+
+    public function __construct(
+            private string $projectDir,
+            private string $crudUploadDir,
+            private string $basePath,
+            private FileUploader $fileUploader,
+
+            ) {
+
+    }
 
     public static function getEntityFqcn(): string {
-        return Recurrence::class;
+        return Document::class;
     }
 
     public function configureFields(string $pageName): iterable {
         return [
-            DateTimeField::new('datetime')
+            IdField::new('id')->hideOnForm()->hideOnIndex(),
+            TextField::new('name'),
+            TextField::new('description')->hideOnIndex(),
+            FileField::new('file')->hideOnIndex()
+                    ->setUploadDir($this->crudUploadDir)
+                    ->setBasePath($this->basePath)
+                    ->setFileConstraints(new Image(maxSize: '1M'))
         ];
     }
 
-    public function createEntity(string $entityFqcn)
-    {
-        $recurrence = new Recurrence();
-        $recurrence->event($this->getEvent());
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
 
-        return $recurrence;
+        $filename = $entityInstance->getFile();
+
+        // check if an image exists
+        if (!empty($filename)) {
+
+            // create a File reference to the image
+            $file = new File($this->projectDir . $this->crudUploadDir . '/' . $filename);
+
+            // (try to) move the uploaded image to the document images directory
+            $uploadedFilename = $this->fileUploader->uploadImageField($this->basePath, $file, $entityInstance->getId());
+
+            // update the path in the entity
+            $entityInstance->setFile($uploadedFilename);
+        }
+        parent::updateEntity($entityManager, $entityInstance);
     }
+
 
 }

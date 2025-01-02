@@ -1,5 +1,7 @@
 <?php
 
+// TODO: fix this
+
 /*
  * This file is part of open-bike.
  *
@@ -11,65 +13,59 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Volunteer;
+use App\Entity\Gallery;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints\Image;
 
-class VolunteerCrudController extends AbstractCrudController {
+class GalleryCrudController extends AbstractCrudController {
 
-    public function __construct(private string $uploadDirectory,
+    public function __construct(
+            private string $projectDir,
+            private string $crudUploadDir,
+            private string $basePath,
             private FileUploader $fileUploader) {
 
     }
 
     public static function getEntityFqcn(): string {
-        return Volunteer::class;
-    }
-
-    public function configureActions(Actions $actions): Actions {
-        return $actions
-                        ->add(Crud::PAGE_INDEX, Action::DETAIL)
-
-        ;
+        return Gallery::class;
     }
 
     public function configureFields(string $pageName): iterable {
         return [
             IdField::new('id')->hideOnForm()->hideOnIndex(),
-            TextField::new('firstName'),
-            TextField::new('lastName'),
-            EmailField::new('email')->setHtmlAttributes(['placeholder' => 'superseded_by_user_account_email']),
-            TelephoneField::new('phone'),
-                    ImageField::new('image')->hideOnIndex()
-                    ->setUploadDir('/public/uploads/')
-                    ->setBasePath('uploads/images/')
-                    ->setFileConstraints(new Image(maxSize: '1M'))
-                    ->setUploadedFileNamePattern('[contenthash].[extension]'),
-            IntegerField::new('tagId')->hideOnIndex(),
-            AssociationField::new('user'),
+            TextField::new('name'),
+            CollectionField::new('pictures')->hideOnIndex()->useEntryCrudForm()->allowAdd(true)->allowDelete(true)
         ];
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
 
-        $imageFile = new File($this->uploadDirectory . '/logo.png', $entityInstance->getImage());
+        $pictures = $entityInstance->getPictures();
 
-        if (!empty($imageFile)) {
-            $imageFileName = $this->fileUploader->uploadImageField(FileUploader::IMAGES, $imageFile);
-            $entityInstance->setImage($imageFileName);
+        foreach ($pictures as $p) {
+            $image = $p->getFile();
+
+            // check if the image exists (arguably unnecessary)
+            if (!empty($image)) {
+//dd($this->projectDir . $this->crudUploadDir . '/' . $image);
+                // create a File reference to the image
+                $imageFile = new File($this->projectDir . $this->crudUploadDir . '/' . $image);
+
+          //      dd($this->basePath,$imageFile);
+
+                // (try to) move the uploaded image to the volunteer images directory
+                $imageFilename = $this->fileUploader->uploadImageField($this->basePath, $imageFile, $p->getId());
+
+                // update the path in the entity
+                $p->setFile($imageFilename);
+              //  dd($p);
+            }
         }
         parent::updateEntity($entityManager, $entityInstance);
     }

@@ -30,6 +30,7 @@ class ContactCrudController extends AbstractCrudController {
 
     public function configureActions(Actions $actions): Actions {
         return $actions
+                        ->add(Crud::PAGE_INDEX, Action::DETAIL)
                         ->remove(Crud::PAGE_INDEX, Action::NEW)
 
         ;
@@ -42,8 +43,8 @@ class ContactCrudController extends AbstractCrudController {
             TextField::new('name')->setDisabled(true),
             EmailField::new('email')->setDisabled(true),
             TextField::new('phone')->setDisabled(true),
-            TextareaField::new('message')->setDisabled(true),
-            TextareaField::new('note'),
+            TextareaField::new('message')->setDisabled(true)->hideOnIndex(),
+            TextareaField::new('note')->hideOnIndex(),
         ];
     }
 }

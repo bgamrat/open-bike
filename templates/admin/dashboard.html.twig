@@ -14,33 +14,36 @@
 {% endblock %}
 {% block main %}
     <article>
-        <h1>{{ 'Current Status' | trans }}</h1>
-        <section id="bikes">
-            <h2>{{ 'Bikes and Requests' | trans }}</h2>
-            <div class="row">
-                <div class="col">
-                    <h3>{{ 'Bikes' | trans }} <small class="text-info fs-3 fst-italic">({{ bikes_ready_for_clients }} {{ 'ready' | trans }})</small></h3></h3>
+        <h1>{{ 'current_status' | trans }}</h1>
+        <div class="row">
+            <div class="col">
+                <section>
+                    <h2>{{ 'bikes' | trans }} <small class="text-info fs-3 fst-italic">({{ bikes_ready_for_clients }} {{ 'ready' | trans }})</small></h2></h3>
                     {{ render_chart(bike_status_chart,{'data-controller':'chartjs'}) }}
-                </div>
-                <div class="col">
-                    <h3>{{ 'Requests' | trans }} <small class="text-info fs-3 fst-italic">({{ bike_requests }} {{ 'pending' | trans }})</small></h3>
+                </section>
+            </div>
+            <div class="col">
+                <section>
+                    <h2>{{ 'bike_requests' | trans }} <small class="text-info fs-3 fst-italic">({{ bike_requests }} {{ 'pending' | trans }})</small></h2>
                     {{ render_chart(bike_request_chart,{'data-controller':'chartjs'}) }}
-                </div>
+                </section>
             </div>
-        </section>
+        </div>
 
-        <section id="more">
-            <h2>{{ 'Bikes Handled and Volunteers' | trans }}</h2>
-            <div class="row">
-                <div class="col">
-                    <h3>{{ 'Bikes' | trans }} <small class="text-info fs-3 fst-italic">({{ total_bikes }} {{ 'bikes' | trans }})</small></h3>
+        <div class="row">
+            <div class="col">
+                <section>
+                    <h2>{{ 'total_bikes' | trans }} <small class="text-info fs-3 fst-italic">({{ total_bikes }} {{ 'bikes' | trans }})</small></h2>
                     {{ render_chart(bike_status_all_chart,{'data-controller':'chartjs'}) }}
-                </div>
-                <div class="col">
-                    <h3>{{ 'Volunteer Hours' | trans }} <small class="text-info fs-3 fst-italic">({{ total_volunteer_hours }} {{ 'Volunteer hours' | trans }})</small></h3>
-                    {{ render_chart(volunteer_hours_chart,{'data-controller':'chartjs'}) }}
-                </div>
+                </section>
             </div>
-        </section>
+            <div class="col">
+                <section>
+                    <h2>{{ 'volunteer_hours' | trans }} <small class="text-info fs-3 fst-italic">({{ total_volunteer_hours | number_format(0) }} {{ ' hours' | trans }})</small></h2>
+                    {{ render_chart(volunteer_hours_chart,{'data-controller':'chartjs'}) }}
+                </section>
+            </div>
+        </div>
+
     </article>
 {% endblock main %}

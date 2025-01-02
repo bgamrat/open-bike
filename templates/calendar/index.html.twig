@@ -42,7 +42,7 @@
         {% for week in calendar %}
             <div class="day row row-cols-7">
                 {% for day in week %}
-                    <div class="p-1 col border">
+                    <div class="p-1 col border overflow-auto">
                         {% if day %}
                             <div class="d-flex justify-content-between">
                                 <span>
