@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Config\BikeRequest\Height;
 use App\Config\BikeRequest\Status;
 use App\Entity\Agency;
 use App\Entity\Bike;
@@ -38,7 +39,7 @@ class BikeRequest {
     private ?DateTimeInterface $date = null;
 
     #[Assert\Regex(
-                pattern: '/^[\w\' ,.()&@"?-]{2,32}$/',
+                pattern: '#^[A-Z0-9\'/ ,.&"-]{2,32}$#i',
                 message: 'requester.height.message.invalid'
         )]
     #[ORM\Column(length: 32)]
@@ -53,6 +54,9 @@ class BikeRequest {
 
     #[ORM\ManyToOne(inversedBy: 'recipient')]
     private ?Bike $bike = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $specialRequests = null;
 
     public function getId(): ?int {
         return $this->id;
@@ -130,5 +134,17 @@ class BikeRequest {
 
     public function __toString() {
         return \sprintf('%s (%s)', $this->clientName, $this->contact);
+    }
+
+    public function getSpecialRequests(): ?string
+    {
+        return $this->specialRequests;
+    }
+
+    public function setSpecialRequests(?string $specialRequests): static
+    {
+        $this->specialRequests = $specialRequests;
+
+        return $this;
     }
 }

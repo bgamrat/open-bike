@@ -28,6 +28,12 @@ class InventoryConfiguration implements ConfigurationInterface {
                 ->isRequired()
                 ->defaultValue(10)
                 ->end()
+                ->floatNode('ready_to_request_ratio')
+                ->info('Ratio of bikes that are ready for clients to the number of requests')
+                ->min(0)
+                ->isRequired()
+                ->defaultValue(1)
+                ->end()
                 ->end()
                 ->end()
         ;

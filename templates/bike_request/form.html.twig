@@ -13,21 +13,26 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-3">
+    <div class="col-xs-12 col-sm-6">
         {{ form_row(form.clientName) }}
     </div>
-    <div class="col-3">
+    <div class="col-xs-12 col-sm-6">
         {{ form_row(form.contact) }}
-    </div>
-    <div class="col-2">
-        {{ form_row(form.height) }}
     </div>
 </div>
 <div class="row">
-    <div class="col-2">
+    <div class="col-xs-12 col-sm-6">
+        {{ form_row(form.height) }}
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        {{ form_row(form.specialRequests) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-4">
         {{ form_row(form.date) }}
     </div>
-    <div class="col-4">
+    <div class="col-xs-12 col-sm-6">
         {{ form_row(form.referrer) }}
     </div>
 </div>

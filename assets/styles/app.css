@@ -19,3 +19,12 @@
 .badge.badge-danger {
     background-color: var(--bs-danger);
 }
+
+[id$='help'] {
+    font-style: italic;
+    font-size: .9em;
+}
+
+[id$='save'] {
+    margin-top: 10px;
+}

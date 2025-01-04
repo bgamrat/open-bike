@@ -18,18 +18,31 @@ use App\Repository\BikeRequestRepository;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Yaml\Yaml;
 
-class BikeInventoryService {
+class StatusService {
+
+    private ?array $distributionConfig = null;
 
     public function __construct(#[Autowire('%kernel.project_dir%')] private $dir, private BikeRepository $bikeRepository, private BikeRequestRepository $bikeRequestRepository) {
-        
+        $this->distributionConfig = Yaml::parse(
+                        \file_get_contents($this->dir . '/config/app/distribution.yml')
+        );
     }
 
-    public function bikes_available(): bool {
+    public function isOpen() {
+        return in_array($this->distributionConfig['distribution']['open'],['true','yes','1','open']);
+    }
+
+    public function message() {
+        return $this->distributionConfig['distribution']['message'];
+    }
+
+    public function bikesAvailable(): bool {
         $inventoryConfig = Yaml::parse(
                         \file_get_contents($this->dir . '/config/app/inventory.yml')
         );
         $inventoryReserve = $inventoryConfig['inventory']['reserve'];
-        return $this->bikeRepository->countByStatus(BikeStatus::ReadyForClient) - $inventoryReserve >
+        $readyToRequestRatio = $inventoryConfig['inventory']['ready_to_request_ratio'];
+        return $readyToRequestRatio * ($this->bikeRepository->countByStatus(BikeStatus::ReadyForClient) - $inventoryReserve) >
                 $this->bikeRequestRepository->count(['status' => BikeRequestStatus::Pending, 'bike' => null]);
     }
 }

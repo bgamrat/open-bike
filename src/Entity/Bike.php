@@ -92,7 +92,7 @@ class Bike {
 
     public function __construct() {
         $this->recipient = new ArrayCollection();
-	$this->updatedAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int {
@@ -249,22 +249,23 @@ class Bike {
         $this->updatedAt = new \DateTimeImmutable();
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
-    {
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getValue(): ?string
-    {
+    public function getValue(): ?string {
         return $this->value;
     }
 
-    public function setValue(string $value): static
-    {
+    public function setValue(string $value): static {
         $this->value = $value;
 
         return $this;
+    }
+
+    public function __toString() {
+        return sprintf('%s %s %s', $this->serialNumber, $this->brand, $this->model);
     }
 }

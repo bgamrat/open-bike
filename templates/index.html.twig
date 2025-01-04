@@ -14,15 +14,6 @@
 
 {% block body %}
     <h1>{{ 'organization_name'| trans }}</h1>
-    {#% if not bike_inventory.bikes_available %}
-        <div class="row">
-            <div class="col">
-                <div class="alert alert-info my-2" role="alert">
-                    {{ 'no_bikes'| trans }}
-                </div>
-            </div>
-        </div>
-    {% endif %#}
     <article>
         <section id="overview">
             <div class="row">

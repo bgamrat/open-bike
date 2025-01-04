@@ -36,6 +36,11 @@ class ContactCrudController extends AbstractCrudController {
         ;
     }
 
+    public function configureCrud(Crud $crud): Crud {
+        return $crud
+                        ->setDefaultSort(['dt' => 'DESC']);
+    }
+
     public function configureFields(string $pageName): iterable {
         return [
             IdField::new('id')->hideOnForm(),

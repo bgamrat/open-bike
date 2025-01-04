@@ -1,2 +1,3 @@
 inventory:
-    reserve: 10
+    reserve: 1
+    ready_to_request_ratio: 1.25
